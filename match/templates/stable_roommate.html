@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+{% extends 'what_a_match/base.html' %}
+<head>
+    <meta charset="UTF-8">
+    <title>Contact</title>
+</head>
+{% block page_header %}
+  <h2>Stable Roommate</h2>
+{% endblock page_header %}
+
+{% block content %}
+<body>
+<p>The stable marriage problem is that of matching n men and n women, each of whom has ranked the members of the opposite
+    sex in order of preference, so that no unmatched couple both prefer each other to their partners under the matching.
+    At least one stable matching exists for every stable marriage instance, and efficient algorithms for finding such a matching are well known.
+    The stable roommates problem involves a single set of even cardinality n, each member of which ranks all the others in order of preference.
+    A stable matching is now a partition of this single set into n2 pairs so that no two unmatched members both prefer each other to their
+    partners under the matching. In this case, there are problem instances for which no stable matching exists. However,
+    the present paper describes an O(n2) algorithm that will determine, for any instance of the problem, whether a stable matching exists,
+    and if so, will find such a matching.
+</p>
+<h1>UNDER CONSTRUCTION.</h1>
+
+<p>[*] Robert W. Irving, "An efficient algorithm for the “stable roommates” problem",
+    Journal of Algorithms, Volume 6, Issue 4, 1985, Pages 577-595</p>
+</body>
+{% endblock content %}
+</html>

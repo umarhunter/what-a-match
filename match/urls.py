@@ -1,5 +1,5 @@
 """
-URL configuration for whatamatch project.
+URL configuration for cupofjoe project.
 
 The `urlpatterns` list routes URLs to views. For more information please see:
     https://docs.djangoproject.com/en/4.2/topics/http/urls/
@@ -14,11 +14,22 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
-from django.contrib import admin
+
 from django.urls import path, include
 
+from . import views
+
+app_name = 'match'
 urlpatterns = [
-    path('admin/', admin.site.urls),
-    path('match/', include('match.urls')),
-    path('', include('what_a_match.urls')),
+    # Include default auth urls.
+    path('', include('django.contrib.auth.urls')),
+
+    # Stable marriage page
+    path('stable_marriage/', views.stable_marriage, name='stable_marriage'),
+
+    # Stable roommate page
+    path('stable_roommate/', views.stable_roommate, name='stable_roommate'),
+
+    # Boehmer & Heeger page
+    path('boehmer_heeger/', views.boehmer_heeger, name='boehmer_heeger'),
 ]

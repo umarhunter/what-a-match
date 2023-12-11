@@ -21,7 +21,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = ""
+SECRET_KEY = 'django-insecure-8ymqb1&@5f%r@$8mx(0zt(*_d_wm5j0&_rulvi-b1kr52=ol_x'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -40,9 +40,8 @@ else:
 # Application definition
 
 INSTALLED_APPS = [
-# user apps
-    'cup_of_joe',
-    'accounts',
+    'what_a_match',
+    'match',
 
     "whitenoise.runserver_nostatic",
     'django_bootstrap5',
@@ -107,7 +106,7 @@ else:
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.postgresql_psycopg2',
-            'NAME': 'cupofjoe',
+            'NAME': 'match',
             'USER': 'sql_user',
             'PASSWORD': 'sql_pass',
             'HOST': 'localhost',
@@ -170,6 +169,6 @@ WHITENOISE_KEEP_ONLY_HASHED_FILES = True
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # My settings.
-LOGIN_REDIRECT_URL = 'cup_of_joe:index'
-#LOGOUT_REDIRECT_URL = 'cup_of_joe:index'
-#LOGIN_URL = 'accounts:login'
+LOGIN_REDIRECT_URL = 'what_a_match:index'
+#LOGOUT_REDIRECT_URL = 'what_a_match:index'
+#LOGIN_URL = 'match:login'
