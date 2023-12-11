@@ -1,4 +1,4 @@
-name: match
+name: my_env
 channels:
   - conda-forge
   - defaults
