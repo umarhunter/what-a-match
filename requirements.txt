@@ -1,30 +1,33 @@
-asgiref @ file:///home/conda/feedstock_root/build_artifacts/asgiref_1685243452975/work
-beautifulsoup4 @ file:///home/conda/feedstock_root/build_artifacts/beautifulsoup4_1680888073205/work
+asgiref==3.7.2
+beautifulsoup4==4.12.2
 contourpy==1.1.0
 cycler==0.11.0
-dj-database-url @ file:///home/conda/feedstock_root/build_artifacts/dj-database-url_1692119547398/work
-Django @ file:///home/conda/feedstock_root/build_artifacts/django_1692790914821/work
-django-bootstrap5 @ file:///home/conda/feedstock_root/build_artifacts/django-bootstrap5_1686162285918/work
-et-xmlfile @ file:///home/conda/feedstock_root/build_artifacts/et_xmlfile_1674664118162/work
+dj-database-url==2.1.0
+Django==4.2.4
+django-bootstrap5==23.3
+et-xmlfile==1.1.0
 fonttools==4.40.0
 gunicorn==21.2.0
 kiwisolver==1.4.4
-matching @ file:///home/conda/feedstock_root/build_artifacts/matching_1626813686622/work
+matching==1.4
 matplotlib==3.7.1
-numpy @ file:///D:/bld/numpy_1691056524419/work
-openpyxl @ file:///D:/bld/openpyxl_1682610928399/work
+numpy==1.25.2
+openpyxl==3.1.2
 packaging==23.1
 pandas==2.0.3
-Pillow @ file:///D:/bld/pillow_1688255919575/work
+Pillow==10.0.0
+pip==23.2.1
 plotly==5.15.0
-psycopg2 @ file:///D:/bld/psycopg2-split_1688999239030/work
+psycopg2==2.9.6
 pyparsing==3.1.0
 python-dateutil==2.8.2
 pytz==2023.3
+setuptools==68.1.2
 six==1.16.0
-soupsieve @ file:///home/conda/feedstock_root/build_artifacts/soupsieve_1658207591808/work
-sqlparse @ file:///home/conda/feedstock_root/build_artifacts/sqlparse_1681817562700/work
+soupsieve==2.3.2.post1
+sqlparse==0.4.4
 tenacity==8.2.2
-typing_extensions @ file:///home/conda/feedstock_root/build_artifacts/typing_extensions_1688315532570/work
+typing_extensions==4.7.1
 tzdata==2023.3
-whitenoise @ file:///home/conda/feedstock_root/build_artifacts/whitenoise_1686933972273/work
+wheel==0.41.2
+whitenoise==6.5.0
