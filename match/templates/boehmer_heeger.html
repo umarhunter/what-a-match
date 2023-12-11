@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+{% extends 'what_a_match/base.html' %}
+<head>
+    <meta charset="UTF-8">
+    <title>Contact</title>
+</head>
+{% block page_header %}
+  <h2>Adapting Stable Matchings to Forced and Forbidden Pairs</h2>
+{% endblock page_header %}
+
+{% block content %}
+<body>
+<p>Boehmer & Heeger's paper introduces the problem of adapting stable matchings to forced and forbidden pairs within the
+    context of classical stable matching settings, including Stable Roommates and Stable Marriage with ties. The goal is
+    to find a stable matching that incorporates a given stable matching (M1), forced pairs (Q), and avoids forbidden
+    pairs (P). The paper presents a polynomial-time algorithm based on the theory of rotations for adapting Stable
+    Roommates matchings to forced pairs. It demonstrates that addressing forbidden pairs is NP-hard, but extends the
+    polynomial-time algorithm to a fixed-parameter tractable algorithm when both forced and forbidden pairs are present.
+    <br><br>
+    The study also explores the impact of preferences containing ties, revealing that algorithmic results may be
+    extended or that formerly tractable problems become intractable, depending on the chosen stability criterion.</p>
+<h1>UNDER CONSTRUCTION.</h1>
+<p>[*] Niclas Boehmer and Klaus Heeger. 2023. Adapting Stable Matchings to Forced and Forbidden Pairs. In Proceedings of the 2023 International Conference on Autonomous Agents and Multiagent Systems (AAMAS '23). International Foundation for Autonomous Agents and Multiagent Systems, Richland, SC, 985–993.<br></p>
+</body>
+{% endblock content %}
+</html>

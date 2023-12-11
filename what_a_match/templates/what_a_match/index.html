@@ -1,0 +1,41 @@
+{% extends 'what_a_match/base.html' %}
+
+{% block page_header %}
+    <body>
+    <div class="p-3 mb-4 bg-light border rounded-3">
+        <div class="container-fluid py-3">
+            <h1 class="display-3">Stable matchings help people/systems stay "connected" 🔌</h1>
+        </div>
+    </div>
+            <div class="p-3 mb-4 bg-light">
+             <div class="container-fluid py-3">
+            <p class="lead">Stable matchings, as shown by <a href="https://www.jstor.org/stable/2312726">Gale and Shapley's algorithm in 1962</a>, play a pivotal role in various
+                real-world scenarios, particularly in matchmaking processes where compatibility and mutual satisfaction are paramount.
+                The algorithm ensures that no two individuals have an incentive to deviate from their assigned partners, thereby
+                fostering fairness and stability. This concept finds application in diverse fields such as online dating platforms,
+                job placements, and even organ transplants,
+                where the compatibility of pairs significantly impacts the overall system efficiency.<br><br>
+
+                Similarly, the Stable Roommates Problem, tackled by <a href="https://www.sciencedirect.com/science/article/abs/pii/0196677485900331">Robert Irving's algorithm in 1985</a>, is of great significance in real-world scenarios where resource allocation and preferences come into play. Whether it's assigning dormitory rooms,
+                office spaces, or roommate pairings, this algorithm ensures stability by preventing cycles of preferences that could lead to dissatisfaction or conflicts among individuals. By optimizing roommate assignments based on
+                preferences, it contributes to harmonious living arrangements, efficient space utilization, and improved overall satisfaction. This algorithmic approach finds practical use in real estate, student housing assignments, and
+                workplace logistics, where creating stable and content cohabitation or co-working environments is essential.<br><br>
+
+                Finally, Niclas Boehmer and his colleague Klaus Heeger are attempting to build on top of these ideas. In a recent paper from 2022,
+                <a href="https://doi.org/10.48550/arXiv.2204.10040">"Adapting Stable Matchings to Forced and Forbidden Pairs"</a>, Boehmer
+                & Heeger introduced the idea of adapting existing stable matches to a new set of forced and forbidden pairs. The idea was to
+                create new matches while trying to keep it as close to the original match. <br><br>
+
+                To better understand how these algorithm work, you may click whichever matching method interests you to learn more.
+            </p>
+
+            <a class="btn btn-outline-primary btn-lg mt-1"
+               href="{% url 'match:stable_marriage' %}">Stable Marriage &raquo;</a>
+            <a class="btn btn-outline-primary btn-lg mt-1"
+               href="{% url 'match:stable_roommate' %}">Stable Roommate &raquo;</a>
+            <a class="btn btn-outline-primary btn-lg mt-1"
+               href="{% url 'match:boehmer_heeger' %}">Boehmer & Heeger &raquo;</a>
+        </div>
+    </div>
+    </body>
+{% endblock page_header %}
