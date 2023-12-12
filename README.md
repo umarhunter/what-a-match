@@ -1,15 +1,15 @@
 
 # What-A-Match
 
-This project provides a demonstration of Gale-Shapley's (1962) and Irving's (1985) algorithms for Stable Matching and Stable Roommate (respectively). This project was created as my final project for Hunter College's **CSCI49387: Distributed Artificial Intelligence** taught by Dr. Anita Raja. 
+This project provides a demonstration of Gale-Shapley's (1962) and Irving's (1985) algorithms for Stable Matching and Stable Roommate (respectively) using the open-source Python ```matching``` library. This project was created as my final project for Hunter College's **CSCI49387: Distributed Artificial Intelligence** taught by Dr. Anita Raja. 
 
-A long term goal is to also incorporate Niclas Boehmer & Klaus Heeger's paper "Adapting Stable Matchings to Forced and Forbidden Pairs" [[AAMAS 2023]](https://arxiv.org/abs/2204.10040) so we can adapt our matches as the scenarios shift. 
+A long term goal is to incorporate illustrations of Niclas Boehmer & Klaus Heeger's paper "Adapting Stable Matchings to Forced and Forbidden Pairs" [[AAMAS 2023]](https://arxiv.org/abs/2204.10040) so we can adapt our matches as the scenarios shift. 
 
 ## Demo
 
 This project is **not complete** as of right now. Nevertheless, current progress can be seen on the [deployed website](https://whatamatch-06b09a339de1.herokuapp.com/).
 
-## Installation
+## Local Installation
 
 Clone the project
 
@@ -55,7 +55,7 @@ Make necessary migrations
 Start the Django server
 
 ```bash
-  python manage.py runserver
+  python manage.py runservers
 ```
 
 
@@ -70,7 +70,7 @@ Start the Django server
  - [Robert W. Irving](https://www.sciencedirect.com/science/article/abs/pii/0196677485900331)
  - [Niclas Boehmer & Klaus Heeger](https://arxiv.org/abs/2204.10040)
  - [Anita Raja](https://anraja.commons.gc.cuny.edu/)
-
+ - [daffidwilde](https://pypi.org/project/matching/)
 
 ## Authors
 
