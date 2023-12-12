@@ -1,11 +1,8 @@
-from django.contrib import messages
-from django.contrib.auth.decorators import login_required
-from django.http import HttpResponseRedirect, Http404
 from django.shortcuts import render, redirect
 from matching.games import StableMarriage, StableRoommates
 
 
-# Create your views here.
+# views here.
 def stable_marriage(request):
     """The Stable Marriage (Gale & Shapley) page"""
     suitor_prefs = {
@@ -22,8 +19,7 @@ def stable_marriage(request):
         'Eleanor': ['Andrew', 'Ryan', 'Daniel', 'David']
     }
 
-    #matching.algorithms.stable_marriage(suitor_prefs, reviewer_prefs)
-    #
+    # set-up dictionaries with player informations before solving
     game = StableMarriage.create_from_dictionaries(
         suitor_prefs, reviewer_prefs
     )

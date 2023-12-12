@@ -11,6 +11,7 @@ gunicorn==21.2.0
 kiwisolver==1.4.4
 matplotlib==3.7.1
 numpy==1.25.2
+matching @ git+https://github.com/umarhunter/matching@main
 openpyxl==3.1.2
 packaging==23.1
 pandas==2.0.3
