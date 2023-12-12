@@ -3,7 +3,7 @@
 {% extends 'what_a_match/base.html' %}
 <head>
     <meta charset="UTF-8">
-    <title>Contact</title>
+    <title>Stable Rooommate</title>
 </head>
 {% block page_header %}
   <h2>Stable Roommate</h2>
@@ -20,7 +20,29 @@
     the present paper describes an O(n2) algorithm that will determine, for any instance of the problem, whether a stable matching exists,
     and if so, will find such a matching.
 </p>
-<h1>UNDER CONSTRUCTION.</h1>
+<h5><b>Set A</b></h5>
+<table>
+    {% for suitor,prefs in suitor_prefs_dict.items %}
+        <tr>
+            <th>{{suitor}}</th>
+            <td>{{prefs}}</td>
+        </tr>
+    {% endfor %}
+    </table>
+<br>
+
+{# results #}
+<br>
+<h5><b>Results</b></h5>
+<table class="border-bottom pb-2 mb-4 list-group-item border-0">
+    {% for match,partner in results.items %}
+      <tr>
+          <td><b>{{match}}</b> matched with <b>{{partner}}</b></td>
+      </tr>
+    {% empty %}
+      <li class="list-group-item border-0">No existing matchings could be made.</li>
+    {% endfor %}
+</table>
 
 <p>[*] Robert W. Irving, "An efficient algorithm for the “stable roommates” problem",
     Journal of Algorithms, Volume 6, Issue 4, 1985, Pages 577-595</p>

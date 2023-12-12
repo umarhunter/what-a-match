@@ -4,7 +4,7 @@
 
 <head>
     <meta charset="UTF-8">
-    <title>Contact</title>
+    <title>Stable Marriage</title>
 </head>
 {% block page_header %}
   <h2>Stable Marriage</h2>
@@ -42,16 +42,6 @@
 {# results #}
 <br>
 <h5><b>Results</b></h5>
-{% comment %}<ul class="list-group border-bottom pb-2 mb-4">
-    {% for match,partner in results.items %}
-      <li class="list-group-item border-0">
-        <b>{{match}} matched with {{partner}}</b>
-      </li>
-    {% empty %}
-      <li class="list-group-item border-0">No existing matchings could be made.</li>
-    {% endfor %}
-  </ul>{% endcomment %}
-
 <table class="border-bottom pb-2 mb-4 list-group-item border-0">
     {% for match,partner in results.items %}
       <tr>
