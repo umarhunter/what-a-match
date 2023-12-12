@@ -1,21 +1,30 @@
+import matching.algorithms
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseRedirect, Http404
 from django.shortcuts import render, redirect
 from matching.games import StableMarriage, StableRoommates
-
+import matching
 
 # Create your views here.
 def stable_marriage(request):
     """The Stable Marriage (Gale & Shapley) page"""
     suitor_prefs = {
-        "A": ["D", "E", "F"], "B": ["D", "F", "E"], "C": ["F", "D", "E"]
+        'David':  ['Emily', 'Olivia', 'Sophie', 'Eleanor'],
+        'Daniel': ['Sophie', 'Olivia', 'Emily', 'Eleanor'],
+        'Andrew': ['Eleanor', 'Sophie', 'Olivia', 'Emily'],
+        'Ryan':   ['Emily', 'Olivia', 'Sophie', 'Eleanor']
     }
 
     reviewer_prefs = {
-        "D": ["B", "C", "A"], "E": ["A", "C", "B"], "F": ["C", "B", "A"]
+        'Emily':   ['David', 'Ryan', 'Daniel', 'Andrew'],
+        'Olivia':  ['Daniel', 'Andrew', 'David', 'Ryan'],
+        'Sophie':  ['David', 'Daniel', 'Andrew', 'Ryan'],
+        'Eleanor': ['Andrew', 'Ryan', 'Daniel', 'David']
     }
 
+    #matching.algorithms.stable_marriage(suitor_prefs, reviewer_prefs)
+    #
     game = StableMarriage.create_from_dictionaries(
         suitor_prefs, reviewer_prefs
     )
@@ -29,8 +38,14 @@ def stable_roommate(request):
     """The Stable Roommate (Robert Irving) page"""
 
     suitor_with_prefs = {
-        "A": ["D", "E", "F"], "B": ["D", "F", "E"], "C": ["F", "D", "E"], "D": ["B", "C", "A"], "E": ["A", "C", "B"],
-        "F": ["C", "B", "A"]
+        'David':  ['Emily', 'Olivia', 'Sophie', 'Eleanor'],
+        'Daniel': ['Sophie', 'Olivia', 'Emily', 'Eleanor'],
+        'Andrew': ['Eleanor', 'Sophie', 'Olivia', 'Emily'],
+        'Ryan':   ['Emily', 'Olivia', 'Sophie', 'Eleanor'],
+        'Emily': ['David', 'Ryan', 'Daniel', 'Andrew'],
+        'Olivia': ['Daniel', 'Andrew', 'David', 'Ryan'],
+        'Sophie': ['David', 'Daniel', 'Andrew', 'Ryan'],
+        'Eleanor': ['Andrew', 'Ryan', 'Daniel', 'David'],
     }
 
     # Ensure that each player has ranked all other players
