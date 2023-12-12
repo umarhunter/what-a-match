@@ -27,7 +27,24 @@ def stable_marriage(request):
 
 def stable_roommate(request):
     """The Stable Roommate (Robert Irving) page"""
-    return render(request, 'stable_roommate.html')
+
+    suitor_with_prefs = {
+        "A": ["D", "E", "F"], "B": ["D", "F", "E"], "C": ["F", "D", "E"], "D": ["B", "C", "A"], "E": ["A", "C", "B"],
+        "F": ["C", "B", "A"]
+    }
+
+    # Ensure that each player has ranked all other players
+    players = set(suitor_with_prefs.keys())
+    for player, preferences in suitor_with_prefs.items():
+        if set(preferences) != players - {player}:
+            missing_players = players - set(preferences) - {player}
+            suitor_with_prefs[player].extend(list(missing_players))
+
+    game = StableRoommates.create_from_dictionary(suitor_with_prefs)
+    results = game.solve()
+
+    return render(request, 'stable_roommate.html', {'results': results,
+                                                    'suitor_prefs_dict': suitor_with_prefs})
 
 
 def boehmer_heeger(request):
