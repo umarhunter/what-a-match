@@ -11,16 +11,14 @@
 
 {% block content %}
 <body>
-<p>The stable marriage problem is that of matching n men and n women, each of whom has ranked the members of the opposite
-    sex in order of preference, so that no unmatched couple both prefer each other to their partners under the matching.
-    At least one stable matching exists for every stable marriage instance, and efficient algorithms for finding such a matching are well known.
+<p>
     The stable roommates problem involves a single set of even cardinality n, each member of which ranks all the others in order of preference.
-    A stable matching is now a partition of this single set into n2 pairs so that no two unmatched members both prefer each other to their
+    A stable matching is now a partition of this single set into n^2 pairs so that no two unmatched members both prefer each other to their
     partners under the matching. In this case, there are problem instances for which no stable matching exists. However,
-    the present paper describes an O(n2) algorithm that will determine, for any instance of the problem, whether a stable matching exists,
-    and if so, will find such a matching.
+    Irving's paper describes an O(n^2) algorithm that will determine, for any instance of the problem, whether a stable matching exists,
+    and if so, will find that matching.
 </p>
-<h5><b>Set A</b></h5>
+<h5><b>Set A</b> (only single set needed for the SR problem)</h5>
 <table>
     {% for suitor,prefs in suitor_prefs_dict.items %}
         <tr>

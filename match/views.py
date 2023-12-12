@@ -9,13 +9,20 @@ from matching.games import StableMarriage, StableRoommates
 def stable_marriage(request):
     """The Stable Marriage (Gale & Shapley) page"""
     suitor_prefs = {
-        "A": ["D", "E", "F"], "B": ["D", "F", "E"], "C": ["F", "D", "E"]
+        'David':  ['Emily', 'Olivia', 'Sophie', 'Eleanor'],
+        'Daniel': ['Sophie', 'Olivia', 'Emily', 'Eleanor'],
+        'Andrew': ['Eleanor', 'Sophie', 'Olivia', 'Emily'],
+        'Ryan':   ['Emily', 'Olivia', 'Sophie', 'Eleanor']
     }
 
     reviewer_prefs = {
-        "D": ["B", "C", "A"], "E": ["A", "C", "B"], "F": ["C", "B", "A"]
+        'Emily':   ['David', 'Ryan', 'Daniel', 'Andrew'],
+        'Olivia':  ['Daniel', 'Andrew', 'David', 'Ryan'],
+        'Sophie':  ['David', 'Daniel', 'Andrew', 'Ryan'],
+        'Eleanor': ['Andrew', 'Ryan', 'Daniel', 'David']
     }
 
+    #
     game = StableMarriage.create_from_dictionaries(
         suitor_prefs, reviewer_prefs
     )
@@ -29,8 +36,14 @@ def stable_roommate(request):
     """The Stable Roommate (Robert Irving) page"""
 
     suitor_with_prefs = {
-        "A": ["D", "E", "F"], "B": ["D", "F", "E"], "C": ["F", "D", "E"], "D": ["B", "C", "A"], "E": ["A", "C", "B"],
-        "F": ["C", "B", "A"]
+        'David':  ['Emily', 'Olivia', 'Sophie', 'Eleanor'],
+        'Daniel': ['Sophie', 'Olivia', 'Emily', 'Eleanor'],
+        'Andrew': ['Eleanor', 'Sophie', 'Olivia', 'Emily'],
+        'Ryan':   ['Emily', 'Olivia', 'Sophie', 'Eleanor'],
+        'Emily': ['David', 'Ryan', 'Daniel', 'Andrew'],
+        'Olivia': ['Daniel', 'Andrew', 'David', 'Ryan'],
+        'Sophie': ['David', 'Daniel', 'Andrew', 'Ryan'],
+        'Eleanor': ['Andrew', 'Ryan', 'Daniel', 'David'],
     }
 
     # Ensure that each player has ranked all other players
