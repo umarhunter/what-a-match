@@ -19,7 +19,7 @@
     no individual has an incentive to break their current pairing for an alternative one.
     This algorithm has widespread applications, from matchmaking in dating platforms to solving complex scenarios like job placements, where maintaining stability and fairness in partnerships is crucial.</p>
 
-<br><h4>Initialization</h4>
+<hr><h4>Initialization</h4>
 <h5><b>Set A</b> (this is the <i>first</i> set for the SM problem)</h5>
 <table>
     {% for suitor,prefs in suitor_prefs_dict.items %}
@@ -39,9 +39,9 @@
         </tr>
     {% endfor %}
     </table>
+<hr>
 
 {# results #}
-<br>
 <h4><b>Results</b></h4>
 <table class="border-bottom pb-2 mb-4 list-group-item border-0">
     {% for match,partner in results.items %}
@@ -52,6 +52,7 @@
       <li class="list-group-item border-0">No existing matchings could be made.</li>
     {% endfor %}
 </table>
+
 [*] Gale, D., and L. S. Shapley. “College Admissions and the Stability of Marriage.” The American Mathematical Monthly, vol. 69, no. 1, 1962, pp. 9–15. JSTOR, https://doi.org/10.2307/2312726.<br>
 </body>
 {% endblock content %}
