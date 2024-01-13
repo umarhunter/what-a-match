@@ -1,21 +1,27 @@
+from django.http import HttpResponseRedirect
 from django.shortcuts import render, redirect
+from django.forms import formset_factory
 from matching.games import StableMarriage, StableRoommates
+from .forms import PersonForm
+
 
 
 # views here.
 def stable_marriage(request):
     """The Stable Marriage (Gale & Shapley) page"""
+
+    # pre-initialization
     suitor_prefs = {
-        'David':  ['Emily', 'Olivia', 'Sophie', 'Eleanor'],
+        'David': ['Emily', 'Olivia', 'Sophie', 'Eleanor'],
         'Daniel': ['Sophie', 'Olivia', 'Emily', 'Eleanor'],
         'Andrew': ['Eleanor', 'Sophie', 'Olivia', 'Emily'],
-        'Ryan':   ['Emily', 'Olivia', 'Sophie', 'Eleanor']
+        'Ryan': ['Emily', 'Olivia', 'Sophie', 'Eleanor']
     }
 
     reviewer_prefs = {
-        'Emily':   ['David', 'Ryan', 'Daniel', 'Andrew'],
-        'Olivia':  ['Daniel', 'Andrew', 'David', 'Ryan'],
-        'Sophie':  ['David', 'Daniel', 'Andrew', 'Ryan'],
+        'Emily': ['David', 'Ryan', 'Daniel', 'Andrew'],
+        'Olivia': ['Daniel', 'Andrew', 'David', 'Ryan'],
+        'Sophie': ['David', 'Daniel', 'Andrew', 'Ryan'],
         'Eleanor': ['Andrew', 'Ryan', 'Daniel', 'David']
     }
 
@@ -24,19 +30,29 @@ def stable_marriage(request):
         suitor_prefs, reviewer_prefs
     )
     results = game.solve()
+
+    if request.method == "POST":
+        form = PersonForm(request.POST)
+        if form.is_valid():
+            return HttpResponseRedirect("/stable_marriage/")
+    else:
+        for i in range(3):
+            form = PersonForm()
+
     return render(request, 'stable_marriage.html', {'results': results,
                                                     'suitor_prefs_dict': suitor_prefs,
-                                                    'reviewer_prefs_dict': reviewer_prefs})
+                                                    'reviewer_prefs_dict': reviewer_prefs,
+                                                    'form': form})
 
 
 def stable_roommate(request):
     """The Stable Roommate (Robert Irving) page"""
 
     suitor_with_prefs = {
-        'David':  ['Emily', 'Olivia', 'Sophie', 'Eleanor'],
+        'David': ['Emily', 'Olivia', 'Sophie', 'Eleanor'],
         'Daniel': ['Sophie', 'Olivia', 'Emily', 'Eleanor'],
         'Andrew': ['Eleanor', 'Sophie', 'Olivia', 'Emily'],
-        'Ryan':   ['Emily', 'Olivia', 'Sophie', 'Eleanor'],
+        'Ryan': ['Emily', 'Olivia', 'Sophie', 'Eleanor'],
         'Emily': ['David', 'Ryan', 'Daniel', 'Andrew'],
         'Olivia': ['Daniel', 'Andrew', 'David', 'Ryan'],
         'Sophie': ['David', 'Daniel', 'Andrew', 'Ryan'],
