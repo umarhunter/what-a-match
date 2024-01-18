@@ -4,22 +4,15 @@
 
 <head>
     <meta charset="UTF-8">
-    <title>Stable Marriage</title>
+    <title>Stable Marriage Matching</title>
 </head>
 {% block page_header %}
-  <h2>Stable Marriage</h2>
+  <h2>SM Matching</h2>
 {% endblock page_header %}
 
 {% block content %}
 <body>
-<p> Gale and Shapley's stable matching algorithm addresses the
-    problem of forming stable pairs in situations where individuals have preferences over one another.
-    The algorithm proceeds through a series of rounds, where each unengaged individual proposes to their most preferred
-    available partner, and each engaged individual holds on to the best proposal received. This process iterates until no further
-    improvements are possible. The resulting matchings are stable because, at the end,
-    no individual has an incentive to break their current pairing for an alternative one.
-    This algorithm has widespread applications, from matchmaking in dating platforms to solving complex scenarios like
-    job placements, where maintaining stability and fairness in partnerships is crucial.</p>
+<p>PLACEHOLDER</p>
 
 <hr><h4>Initialization</h4>
 <h5><b>Set A</b> (this is the <i>first</i> set for the SM problem)</h5>
@@ -55,8 +48,14 @@
     {% endfor %}
 </table>
 
-
-<form action="/stable_marriage/" method="post">
+<form action="sm_matching/" method="post">
+    {% csrf_token %}
+    <p>Please enter the total number of people being matched (from both sets):</p>
+    {{ int_form.as_div }}
+    <input type="submit" value="Submit">
+</form>
+<br><br>
+<form action="sm_matching/" method="post">
     {% csrf_token %}
     {{ form.as_div }}
     <br>

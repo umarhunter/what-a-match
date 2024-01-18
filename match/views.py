@@ -2,8 +2,7 @@ from django.http import HttpResponseRedirect
 from django.shortcuts import render, redirect
 from django.forms import formset_factory
 from matching.games import StableMarriage, StableRoommates
-from .forms import PersonForm
-
+from .forms import PersonForm, IntegerInputForm
 
 
 # views here.
@@ -31,18 +30,39 @@ def stable_marriage(request):
     )
     results = game.solve()
 
+    # POST data submitted; we may now process form inputs
     if request.method == "POST":
+        int_form = IntegerInputForm(request.POST)
+        if int_form.is_valid():
+            int_input = int_form.save(commit=False)
+            int_input.save()
+            print("Ran)(")
+            return HttpResponseRedirect('match:sm_matching')
+    else:
+        # no POST data, create a new/blank form
+        int_form = IntegerInputForm()  # we need to know the number of individuals
+
+    context = {'results': results,
+               'suitor_prefs_dict': suitor_prefs,
+               'reviewer_prefs_dict': reviewer_prefs,
+               'int_form': int_form}
+    return render(request, 'match/stable_marriage.html', context)
+
+
+def sm_matching(request):
+    """The Stable Marriage Matching Page"""
+    if request.method == "POST":
+        # form was completed
         form = PersonForm(request.POST)
         if form.is_valid():
-            return HttpResponseRedirect("/stable_marriage/")
+            return HttpResponseRedirect("/sm_matching/")
     else:
-        for i in range(3):
-            form = PersonForm()
+        PersonFormSet = formset_factory(PersonForm, extra=5)
+        formset = PersonFormSet()
 
-    return render(request, 'stable_marriage.html', {'results': results,
-                                                    'suitor_prefs_dict': suitor_prefs,
-                                                    'reviewer_prefs_dict': reviewer_prefs,
-                                                    'form': form})
+    return render(request, 'match/sm_matching.html', {
+        'form': formset
+    })
 
 
 def stable_roommate(request):

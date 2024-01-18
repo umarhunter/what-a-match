@@ -1,12 +1,16 @@
 from django import forms
 
-from .models import Person
+from .models import Person, Integer
 
 
 class PersonForm(forms.ModelForm):
     class Meta:
         model = Person
-        fields = ['name', 'preferences']
+        fields = ['name']
+        labels = {'name': ''}
 
-    def is_valid(selfs):
-        return True
+
+class IntegerInputForm(forms.ModelForm):
+    class Meta:
+        model = Integer
+        fields = ['number']
