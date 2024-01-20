@@ -55,7 +55,7 @@ Make necessary migrations
 Start the Django server
 
 ```bash
-  python manage.py runservers
+  python manage.py runserver
 ```
 
 
