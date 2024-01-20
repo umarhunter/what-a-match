@@ -24,7 +24,7 @@ def stable_marriage(request):
         'Eleanor': ['Andrew', 'Ryan', 'Daniel', 'David']
     }
 
-    # set-up dictionaries with player informations before solving
+    # set-up dictionaries with player information's before solving
     game = StableMarriage.create_from_dictionaries(
         suitor_prefs, reviewer_prefs
     )
@@ -58,10 +58,10 @@ def sm_matching(request):
             return HttpResponseRedirect("/sm_matching/")
     else:
         PersonFormSet = formset_factory(PersonForm, extra=5)
-        formset = PersonFormSet()
+        form = PersonFormSet()
 
     return render(request, 'match/sm_matching.html', {
-        'form': formset
+        'form': form
     })
 
 
@@ -89,10 +89,10 @@ def stable_roommate(request):
     game = StableRoommates.create_from_dictionary(suitor_with_prefs)
     results = game.solve()
 
-    return render(request, 'stable_roommate.html', {'results': results,
+    return render(request, 'match/stable_roommate.html', {'results': results,
                                                     'suitor_prefs_dict': suitor_with_prefs})
 
 
 def boehmer_heeger(request):
     """ Boehmer & Heeger's adapting stable marriage page """
-    return render(request, 'boehmer_heeger.html')
+    return render(request, 'match/boehmer_heeger.html')
