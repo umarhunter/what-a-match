@@ -12,9 +12,9 @@
 
 {% block content %}
 <body>
-<p>This page will allow the user to enter names of persons to be matched. </p>
+<p>Match completed </p>
 
-<hr><h4>Initialization</h4>
+<hr><h4>Results</h4>
 <h5>Enter all persons to be matched</h5>
 <form action="{% url 'match:sm_matching' %}" method="post">
     {% csrf_token %}
