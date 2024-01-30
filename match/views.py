@@ -9,7 +9,7 @@ from .forms import PersonForm, IntegerInputForm
 def stable_marriage(request):
     """The Stable Marriage (Gale & Shapley) page"""
 
-    # pre-initialization
+    # initialization for demo
     suitor_prefs = {
         'David': ['Emily', 'Olivia', 'Sophie', 'Eleanor'],
         'Daniel': ['Sophie', 'Olivia', 'Emily', 'Eleanor'],
@@ -24,7 +24,7 @@ def stable_marriage(request):
         'Eleanor': ['Andrew', 'Ryan', 'Daniel', 'David']
     }
 
-    # set-up dictionaries with player informations before solving
+    # set-up dictionaries with player information's before solving
     game = StableMarriage.create_from_dictionaries(
         suitor_prefs, reviewer_prefs
     )
@@ -33,11 +33,10 @@ def stable_marriage(request):
     # POST data submitted; we may now process form inputs
     if request.method == "POST":
         int_form = IntegerInputForm(request.POST)
+        num = int_form['number'].value()
         if int_form.is_valid():
-            int_input = int_form.save(commit=False)
-            int_input.save()
-            print("Ran)(")
-            return HttpResponseRedirect('match:sm_matching')
+            request.session['num'] = num
+            return redirect('match:sm_matching')
     else:
         # no POST data, create a new/blank form
         int_form = IntegerInputForm()  # we need to know the number of individuals
@@ -51,18 +50,28 @@ def stable_marriage(request):
 
 def sm_matching(request):
     """The Stable Marriage Matching Page"""
+    show_results = False
+    num = int(request.session.get('num'))
     if request.method == "POST":
         # form was completed
-        form = PersonForm(request.POST)
-        if form.is_valid():
-            return HttpResponseRedirect("/sm_matching/")
+        show_results = True
+        form1 = PersonForm(request.POST)
+        if form1.is_valid():
+            return redirect("match:sm_matching")
     else:
-        PersonFormSet = formset_factory(PersonForm, extra=5)
-        formset = PersonFormSet()
+        PersonFormSet = formset_factory(PersonForm, extra=num)
+        form1 = PersonFormSet()
 
     return render(request, 'match/sm_matching.html', {
-        'form': formset
+        'form1': form1,
+        'show_results': show_results
     })
+
+
+def sm_matching_complete(request):
+    """Displays the results of the SM matching"""
+
+    return render(request, 'match/sm_matching_complete.html', {})
 
 
 def stable_roommate(request):
@@ -89,10 +98,10 @@ def stable_roommate(request):
     game = StableRoommates.create_from_dictionary(suitor_with_prefs)
     results = game.solve()
 
-    return render(request, 'stable_roommate.html', {'results': results,
-                                                    'suitor_prefs_dict': suitor_with_prefs})
+    return render(request, 'match/stable_roommate.html', {'results': results,
+                                                          'suitor_prefs_dict': suitor_with_prefs})
 
 
 def boehmer_heeger(request):
     """ Boehmer & Heeger's adapting stable marriage page """
-    return render(request, 'boehmer_heeger.html')
+    return render(request, 'match/boehmer_heeger.html')
