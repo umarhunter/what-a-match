@@ -3,13 +3,6 @@ from django.forms import BaseFormSet
 
 from .models import Integer
 
-
-class RequiredFormSet(BaseFormSet):
-    def __init__(self, *args, **kwargs):
-        super(RequiredFormSet, self).__init__(*args, **kwargs)
-        for form in self.forms:
-            form.empty_permitted = False
-
 class InputForm(forms.Form):
     name = forms.CharField(max_length=20)
 
