@@ -2,7 +2,7 @@ from django.http import HttpResponseRedirect
 from django.shortcuts import render, redirect
 from django.forms import formset_factory
 from matching.games import StableMarriage, StableRoommates
-from .forms import PersonForm, IntegerInputForm
+from .forms import InputForm, IntegerInputForm, RequiredFormSet
 
 
 # views here.
@@ -51,22 +51,38 @@ def stable_marriage(request):
 def sm_matching(request):
     """The Stable Marriage Matching Page"""
     show_results = False
-    num = int(request.session.get('num'))
+    num = request.session.get('num')
+
+    if not num:
+        # Handle the case where 'num' is not set in the session
+        return redirect('match:stable_marriage')  # Redirect to a view that sets 'num'
+
+    num = int(num)
+    InputFormSet = formset_factory(InputForm, min_num=num, validate_min=True, extra=0)
     if request.method == "POST":
-        # form was completed
-        show_results = True
-        form1 = PersonForm(request.POST)
-        if form1.is_valid():
-            return redirect("match:sm_matching")
+        # POST data submitted
+        formset = InputFormSet(request.POST)
+        if formset.is_valid():
+            # Process the formset data
+            for form in formset:
+                # Access cleaned data of each form
+                cleaned_data = form.cleaned_data
+                print(cleaned_data)
+                # Save data if necessary
+                # person = Person.objects.create(name=cleaned_data['name'])
+            show_results = True
+            # Perform matching logic or save data
+            return redirect("match:sm_matching_complete")  # Redirect to avoid re-submission
+        else:
+            print("Formset is not valid")
     else:
-        PersonFormSet = formset_factory(PersonForm, extra=num)
-        form1 = PersonFormSet()
+        # no post data
+        formset = InputFormSet()
 
     return render(request, 'match/sm_matching.html', {
-        'form1': form1,
+        'formset': formset,
         'show_results': show_results
     })
-
 
 def sm_matching_complete(request):
     """Displays the results of the SM matching"""

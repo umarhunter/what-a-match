@@ -15,15 +15,6 @@
 <p>Match completed </p>
 
 <hr><h4>Results</h4>
-<h5>Enter all persons to be matched</h5>
-<form action="{% url 'match:sm_matching' %}" method="post">
-    {% csrf_token %}
-    {% for form in form1 %}
-        <li>{{ form.as_div }}</li>
-    {% endfor %}
-    <br>
-    <input type="submit" value="Submit">
-</form>
 <table>
     {% for suitor,prefs in suitor_prefs_dict.items %}
         <tr>
@@ -42,20 +33,6 @@
     {% endfor %}
     </table>
 <hr>
-
-{# results #}
-{% if no_results %}
-    <h4><b>Results</b></h4>
-    <table class="border-bottom pb-2 mb-4 list-group-item border-0">
-    {% for match,partner in results.items %}
-      <tr>
-          <td><b>{{match}}</b> matched with <b>{{partner}}</b></td>
-      </tr>
-    {% empty %}
-      <li class="list-group-item border-0">No existing matchings could be made.</li>
-    {% endfor %}
-    </table>
-{% endif %}
 
 
 <br>
