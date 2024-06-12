@@ -1,13 +1,10 @@
 from django import forms
+from django.forms import BaseFormSet
 
-from .models import Person, Integer
+from .models import Integer
 
-
-class PersonForm(forms.ModelForm):
-    class Meta:
-        model = Person
-        fields = ['name']
-        labels = {'name': ''}
+class InputForm(forms.Form):
+    name = forms.CharField(max_length=20)
 
 
 class IntegerInputForm(forms.ModelForm):

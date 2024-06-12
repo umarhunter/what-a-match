@@ -16,46 +16,17 @@
 
 <hr><h4>Initialization</h4>
 <h5>Enter all persons to be matched</h5>
-<form action="{% url 'match:sm_matching' %}" method="post">
+<br>
+<b>Suitors</b>
+<form action="{% url 'match:sm_matching' %}" method="post" enctype="multipart/form-data">
     {% csrf_token %}
-    {% for form in form1 %}
-        <li>{{ form.as_div }}</li>
-    {% endfor %}
-    <br>
+        {{ suitors.management_form }}
+        {{ reviewers.management_form }}
+        {{ suitors.as_p }}
+        {{ reviewers.as_p }}
     <input type="submit" value="Submit">
 </form>
-<table>
-    {% for suitor,prefs in suitor_prefs_dict.items %}
-        <tr>
-            <th>{{suitor}}'s preferences: </th>
-            <td>{{prefs}}</td>
-        </tr>
-    {% endfor %}
-    </table>
 <br>
-<table>
-    {% for suitor,prefs in reviewer_prefs_dict.items %}
-        <tr>
-            <th>{{suitor}}'s preferences: </th>
-            <td>{{prefs}}</td>
-        </tr>
-    {% endfor %}
-    </table>
-<hr>
-
-{# results #}
-{% if no_results %}
-    <h4><b>Results</b></h4>
-    <table class="border-bottom pb-2 mb-4 list-group-item border-0">
-    {% for match,partner in results.items %}
-      <tr>
-          <td><b>{{match}}</b> matched with <b>{{partner}}</b></td>
-      </tr>
-    {% empty %}
-      <li class="list-group-item border-0">No existing matchings could be made.</li>
-    {% endfor %}
-    </table>
-{% endif %}
 
 
 <br>

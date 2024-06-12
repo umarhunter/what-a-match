@@ -6,24 +6,18 @@
     <meta charset="UTF-8">
     <title>Stable Marriage Matching</title>
 </head>
+
 {% block page_header %}
   <h2>SM Matching</h2>
 {% endblock page_header %}
 
 {% block content %}
 <body>
-<p>Match completed </p>
-
+<div class="loader"></div>
+<p>Match completed successfully</p>
+<div class="loader"></div>
 <hr><h4>Results</h4>
-<h5>Enter all persons to be matched</h5>
-<form action="{% url 'match:sm_matching' %}" method="post">
-    {% csrf_token %}
-    {% for form in form1 %}
-        <li>{{ form.as_div }}</li>
-    {% endfor %}
-    <br>
-    <input type="submit" value="Submit">
-</form>
+
 <table>
     {% for suitor,prefs in suitor_prefs_dict.items %}
         <tr>
@@ -43,23 +37,8 @@
     </table>
 <hr>
 
-{# results #}
-{% if no_results %}
-    <h4><b>Results</b></h4>
-    <table class="border-bottom pb-2 mb-4 list-group-item border-0">
-    {% for match,partner in results.items %}
-      <tr>
-          <td><b>{{match}}</b> matched with <b>{{partner}}</b></td>
-      </tr>
-    {% empty %}
-      <li class="list-group-item border-0">No existing matchings could be made.</li>
-    {% endfor %}
-    </table>
-{% endif %}
-
 
 <br>
-[*] Gale, D., and L. S. Shapley. “College Admissions and the Stability of Marriage.” The American Mathematical Monthly, vol. 69, no. 1, 1962, pp. 9–15. JSTOR, https://doi.org/10.2307/2312726.<br>
 </body>
 {% endblock content %}
 </html>
