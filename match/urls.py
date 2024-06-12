@@ -27,6 +27,7 @@ urlpatterns = [
     # Stable marriage page
     path('stable_marriage/', views.stable_marriage, name='stable_marriage'),
     path('sm_matching/', views.sm_matching, name='sm_matching'),
+    path('sm_matching_1/', views.sm_matching_1, name='sm_matching_1'),
     path('sm_matching_complete/', views.sm_matching_complete, name='sm_matching_complete'),
 
     # Stable roommate page

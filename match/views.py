@@ -2,7 +2,13 @@ from django.http import HttpResponseRedirect
 from django.shortcuts import render, redirect
 from django.forms import formset_factory
 from matching.games import StableMarriage, StableRoommates
-from .forms import InputForm, IntegerInputForm, RequiredFormSet
+from .forms import InputForm, IntegerInputForm
+
+
+class StorageContainer:
+    dictionary = {}
+    suitor_list = []
+    reviewer_list = []
 
 
 # views here.
@@ -50,39 +56,74 @@ def stable_marriage(request):
 
 def sm_matching(request):
     """The Stable Marriage Matching Page"""
-    show_results = False
-    num = request.session.get('num')
 
+    num = int(request.session.get('num'))
     if not num:
         # Handle the case where 'num' is not set in the session
         return redirect('match:stable_marriage')  # Redirect to a view that sets 'num'
 
-    num = int(num)
-    InputFormSet = formset_factory(InputForm, min_num=num, validate_min=True, extra=0)
+    SuitorFormSet = formset_factory(InputForm, min_num=int(num / 2), validate_min=True, extra=0)
+    ReviewerFormSet = formset_factory(InputForm, min_num=int(num / 2), validate_min=True, extra=0)
+
     if request.method == "POST":
         # POST data submitted
-        formset = InputFormSet(request.POST)
-        if formset.is_valid():
-            # Process the formset data
-            for form in formset:
-                # Access cleaned data of each form
-                cleaned_data = form.cleaned_data
-                print(cleaned_data)
-                # Save data if necessary
-                # person = Person.objects.create(name=cleaned_data['name'])
-            show_results = True
-            # Perform matching logic or save data
-            return redirect("match:sm_matching_complete")  # Redirect to avoid re-submission
+        suitors = SuitorFormSet(request.POST, prefix='suitors')
+        reviewers = ReviewerFormSet(request.POST, prefix='reviewers')
+
+        if suitors.is_valid():
+
+            for suitor in suitors:
+                cd = suitor.cleaned_data
+                print(cd.get('name'))
+                StorageContainer.suitor_list.append(str(cd.get('name')))
+
+            for reviewer in reviewers:
+                cd = reviewer.cleaned_data
+                print(cd.get('name'))
+                StorageContainer.reviewer_list.append(str(cd.get('name')))
+
+            return redirect("match:sm_matching_1")  # Redirect to avoid re-submission
         else:
-            print("Formset is not valid")
+            print("Formsets are not valid")
     else:
-        # no post data
-        formset = InputFormSet()
+        # no POST data
+        reviewers = ReviewerFormSet(prefix='reviwers')
+        suitors = SuitorFormSet(prefix='suitors')
 
     return render(request, 'match/sm_matching.html', {
-        'formset': formset,
-        'show_results': show_results
+        'suitors': suitors,
+        'reviewers': reviewers
     })
+
+
+def sm_matching_1(request):
+    """The Stable Marriage Matching Pt. 2"""
+
+    suitors = StorageContainer.suitor_list
+    reviewers = StorageContainer.reviewer_list
+
+    for suitor in suitors:
+        print(suitor)
+
+    for reviewer in reviewers:
+        print(reviewer)
+
+    suitors.clear()
+    reviewers.clear()
+    # if request.method == "POST":
+    #     # POST data submitted
+    #
+    #     if formset.is_valid():
+    #         # Perform matching logic or save data
+    #
+    #         return redirect("match:sm_matching_1")  # Redirect to avoid re-submission
+    #     else:
+    #         print("Formset is not valid")
+    # else:
+    #     formset = InputForm()
+
+    return render(request, 'match/sm_matching_1.html')
+
 
 def sm_matching_complete(request):
     """Displays the results of the SM matching"""

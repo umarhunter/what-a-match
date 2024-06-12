@@ -16,12 +16,17 @@
 
 <hr><h4>Initialization</h4>
 <h5>Enter all persons to be matched</h5>
-<form action="{% url 'match:sm_matching' %}" method="post">
+<br>
+<b>Suitors</b>
+<form action="{% url 'match:sm_matching' %}" method="post" enctype="multipart/form-data">
     {% csrf_token %}
-        {{ formset.as_div }}
-    <br>
+        {{ suitors.management_form }}
+        {{ reviewers.management_form }}
+        {{ suitors.as_p }}
+        {{ reviewers.as_p }}
     <input type="submit" value="Submit">
 </form>
+<br>
 
 
 <br>
