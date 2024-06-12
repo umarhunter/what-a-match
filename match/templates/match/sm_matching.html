@@ -12,55 +12,23 @@
 
 {% block content %}
 <body>
-<p>PLACEHOLDER</p>
+<p>This page will allow the user to enter names of persons to be matched. </p>
 
 <hr><h4>Initialization</h4>
-<h5><b>Set A</b> (this is the <i>first</i> set for the SM problem)</h5>
-<table>
-    {% for suitor,prefs in suitor_prefs_dict.items %}
-        <tr>
-            <th>{{suitor}}'s preferences: </th>
-            <td>{{prefs}}</td>
-        </tr>
-    {% endfor %}
-    </table>
+<h5>Enter all persons to be matched</h5>
 <br>
-<h5><b>Set B</b> (this is the <i>second</i> set for the SM problem)</h5>
-<table>
-    {% for suitor,prefs in reviewer_prefs_dict.items %}
-        <tr>
-            <th>{{suitor}}'s preferences: </th>
-            <td>{{prefs}}</td>
-        </tr>
-    {% endfor %}
-    </table>
-<hr>
-
-{# results #}
-<h4><b>Results</b></h4>
-<table class="border-bottom pb-2 mb-4 list-group-item border-0">
-    {% for match,partner in results.items %}
-      <tr>
-          <td><b>{{match}}</b> matched with <b>{{partner}}</b></td>
-      </tr>
-    {% empty %}
-      <li class="list-group-item border-0">No existing matchings could be made.</li>
-    {% endfor %}
-</table>
-
-<form action="sm_matching/" method="post">
+<b>Suitors</b>
+<form action="{% url 'match:sm_matching' %}" method="post" enctype="multipart/form-data">
     {% csrf_token %}
-    <p>Please enter the total number of people being matched (from both sets):</p>
-    {{ int_form.as_div }}
+        {{ suitors.management_form }}
+        {{ reviewers.management_form }}
+        {{ suitors.as_p }}
+        {{ reviewers.as_p }}
     <input type="submit" value="Submit">
 </form>
-<br><br>
-<form action="sm_matching/" method="post">
-    {% csrf_token %}
-    {{ form.as_div }}
-    <br>
-    <input type="submit" value="Find Match">
-</form>
+<br>
+
+
 <br>
 [*] Gale, D., and L. S. Shapley. “College Admissions and the Stability of Marriage.” The American Mathematical Monthly, vol. 69, no. 1, 1962, pp. 9–15. JSTOR, https://doi.org/10.2307/2312726.<br>
 </body>

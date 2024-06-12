@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+{% extends 'what_a_match/base.html' %}
+
+<head>
+    <meta charset="UTF-8">
+    <title>Stable Marriage Matching</title>
+</head>
+
+{% block page_header %}
+  <h2>SM Matching</h2>
+{% endblock page_header %}
+
+{% block content %}
+<body>
+<div class="loader"></div>
+<p>Match completed successfully</p>
+<div class="loader"></div>
+<hr><h4>Results</h4>
+
+<table>
+    {% for suitor,prefs in suitor_prefs_dict.items %}
+        <tr>
+            <th>{{suitor}}'s preferences: </th>
+            <td>{{prefs}}</td>
+        </tr>
+    {% endfor %}
+    </table>
+<br>
+<table>
+    {% for suitor,prefs in reviewer_prefs_dict.items %}
+        <tr>
+            <th>{{suitor}}'s preferences: </th>
+            <td>{{prefs}}</td>
+        </tr>
+    {% endfor %}
+    </table>
+<hr>
+
+
+<br>
+</body>
+{% endblock content %}
+</html>

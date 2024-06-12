@@ -1,5 +1,5 @@
 
-# What-A-Match
+# What-a-Match
 
 This project provides a demonstration of Gale-Shapley's (1962) and Irving's (1985) algorithms for Stable Matching and Stable Roommate (respectively) using the open-source Python ```matching``` library. This project was created as my final project for Hunter College's **CSCI49387: Distributed Artificial Intelligence** taught by Dr. Anita Raja. 
 
