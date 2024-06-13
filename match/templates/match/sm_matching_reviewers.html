@@ -15,10 +15,10 @@
 <p>This page will allow the user to enter names of persons to be matched. </p>
 
 <hr><h4>Initialization</h4>
-<h5>Enter all suitors to be matched</h5>
+<h5>Enter all reviewers to be matched</h5>
 <br>
-<b>Suitors</b>
-<form action="{% url 'match:sm_matching' %}" method="post">
+<b>Reviewers</b>
+<form action="{% url 'match:sm_matching_reviewers' %}" method="post">
     {% csrf_token %}
         {{ reviewers.management_form }}
         {{ reviewers.as_p }}
@@ -28,7 +28,7 @@
 
 
 <br>
-[*] Gale, D., and L. S. Shapley. “College Admissions and the Stability of Marriage.” The American Mathematical Monthly, vol. 69, no. 1, 1962, pp. 9–15. JSTOR, https://doi.org/10.2307/2312726.<br>
+
 </body>
 {% endblock content %}
 </html>
