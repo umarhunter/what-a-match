@@ -42,7 +42,7 @@ def stable_marriage(request):
         num = int_form['number'].value()
         if int_form.is_valid():
             request.session['num'] = num
-            return redirect('match:sm_matching')
+            return redirect('match:sm_matching_suitors')
     else:
         # no POST data, create a new/blank form
         int_form = IntegerInputForm()  # we need to know the number of individuals
@@ -72,16 +72,6 @@ def sm_matching(request):
 
         if suitors.is_valid():
 
-            for suitor in suitors:
-                cd = suitor.cleaned_data
-                print(cd.get('name'))
-                StorageContainer.suitor_list.append(str(cd.get('name')))
-
-            for reviewer in reviewers:
-                cd = reviewer.cleaned_data
-                print(cd.get('name'))
-                StorageContainer.reviewer_list.append(str(cd.get('name')))
-
             return redirect("match:sm_matching_1")  # Redirect to avoid re-submission
         else:
             print("Formsets are not valid")
@@ -95,6 +85,63 @@ def sm_matching(request):
         'reviewers': reviewers
     })
 
+
+def sm_matching_suitors(request):
+    """ Retrieve all suitors """
+
+    num = int(request.session.get('num'))
+    if not num:
+        # Handle the case where 'num' is not set in the session
+        return redirect('match:stable_marriage')  # Redirect to a view that sets 'num'
+
+    SuitorFormSet = formset_factory(InputForm, min_num=int(num / 2), validate_min=True, extra=0)
+
+    if request.method == "POST":
+        # POST data submitted
+        suitors = SuitorFormSet(request.POST, prefix='suitors')
+
+        if suitors.is_valid():
+            return redirect("match:sm_matching_reviewers")  # Redirect to avoid re-submission
+        else:
+            print("Formsets are not valid")
+    else:
+        # no POST data
+        suitors = SuitorFormSet(prefix='suitors')
+
+    return render(request, 'match/sm_matching_suitors.html', {
+        'suitors': suitors,
+    })
+
+
+def sm_matching_reviewers(request):
+    """ Retrieve all reviewers """
+    num = int(request.session.get('num'))
+    if not num:
+        # Handle the case where 'num' is not set in the session
+        return redirect('match:stable_marriage')  # Redirect to a view that sets 'num'
+
+    SuitorFormSet = formset_factory(InputForm, min_num=int(num / 2), validate_min=True, extra=0)
+    ReviewerFormSet = formset_factory(InputForm, min_num=int(num / 2), validate_min=True, extra=0)
+
+    if request.method == "POST":
+        # POST data submitted
+        suitors = SuitorFormSet(request.POST, prefix='suitors')
+        reviewers = ReviewerFormSet(request.POST, prefix='reviewers')
+
+        if suitors.is_valid():
+
+            return redirect("match:sm_matching_1")  # Redirect to avoid re-submission
+        else:
+            print("Formsets are not valid")
+    else:
+        # no POST data
+        reviewers = ReviewerFormSet(prefix='reviwers')
+        suitors = SuitorFormSet(prefix='suitors')
+
+    return render(request, 'match/sm_matching.html', {
+        'suitors': suitors,
+        'reviewers': reviewers
+    })
 
 def sm_matching_1(request):
     """The Stable Marriage Matching Pt. 2"""
@@ -162,3 +209,4 @@ def stable_roommate(request):
 def boehmer_heeger(request):
     """ Boehmer & Heeger's adapting stable marriage page """
     return render(request, 'match/boehmer_heeger.html')
+
