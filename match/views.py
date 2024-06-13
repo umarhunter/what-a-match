@@ -109,7 +109,7 @@ def sm_matching_reviewers(request):
                 cd = reviewer.cleaned_data
                 name = cd.get('name')
                 StorageContainer.reviewer_list.append(name)
-            return redirect("match:sm_matching_1")  # Redirect to avoid re-submission
+            return redirect("match:sm_matching")  # Redirect to avoid re-submission
         else:
             print("Reviewer formsets are not valid")
     else:
@@ -120,9 +120,34 @@ def sm_matching_reviewers(request):
         'reviewers': reviewers
     })
 
-
 def sm_matching(request):
-    """The Stable Marriage Matching Page"""
+    """The Stable Marriage Matching Pt. 2"""
+
+    suitors = StorageContainer.suitor_list
+    reviewers = StorageContainer.reviewer_list
+
+    num = len(suitors) + len(reviewers)
+
+    PrefsFormSet = formset_factory(PrefsInputForm, min_num=int(num / 2), validate_min=True, extra=0)
+
+    if request.method == "POST":
+        # POST data submitted
+
+        if PrefsFormSet.is_valid():
+            # Perform matching logic or save data
+
+            return redirect("match:sm_matching_complete")  # Redirect to avoid re-submission
+        else:
+            print("Formset is not valid")
+    else:
+        formset = PrefsFormSet()
+
+    context = {'suitors': suitors, 'reviewers': reviewers}
+    return render(request, 'match/sm_matching.html', context)
+
+
+def sm_matching_complete(request):
+    """Displays the results of the SM matching"""
 
     num = int(request.session.get('num'))
     if not num:
@@ -151,38 +176,6 @@ def sm_matching(request):
         'suitors': suitors,
         'reviewers': reviewers
     })
-
-
-def sm_matching_1(request):
-    """The Stable Marriage Matching Pt. 2"""
-
-    suitors = StorageContainer.suitor_list
-    reviewers = StorageContainer.reviewer_list
-
-    num = len(suitors) + len(reviewers)
-
-    PrefsFormSet = formset_factory(PrefsInputForm, min_num=int(num / 2), validate_min=True, extra=0)
-
-    if request.method == "POST":
-        # POST data submitted
-
-
-        if PrefsFormSet.is_valid():
-            # Perform matching logic or save data
-
-            return redirect("match:sm_matching_1")  # Redirect to avoid re-submission
-        else:
-            print("Formset is not valid")
-    else:
-        formset = InputForm()
-    context = {'suitors': suitors, 'reviewers': reviewers}
-    return render(request, 'match/sm_matching_1.html', context)
-
-
-def sm_matching_complete(request):
-    """Displays the results of the SM matching"""
-
-    return render(request, 'match/sm_matching_complete.html', {})
 
 
 def stable_roommate(request):

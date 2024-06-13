@@ -29,7 +29,6 @@ urlpatterns = [
     path('sm_matching/', views.sm_matching, name='sm_matching'),
     path('sm_matching_suitors/', views.sm_matching_suitors, name='sm_matching_suitors'),
     path('sm_matching_reviewers/', views.sm_matching_reviewers, name='sm_matching_reviewers'),
-    path('sm_matching_1/', views.sm_matching_1, name='sm_matching_1'),
     path('sm_matching_complete/', views.sm_matching_complete, name='sm_matching_complete'),
 
     # Stable roommate page
