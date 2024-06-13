@@ -10,6 +10,11 @@ class StorageContainer:
     suitor_list = []
     reviewer_list = []
 
+    def clear(self):
+        self.suitor_list.clear()
+        self.reviewer_list.clear()
+        # self.dictionary.clear()
+
 
 # views here.
 def stable_marriage(request):
@@ -54,6 +59,68 @@ def stable_marriage(request):
     return render(request, 'match/stable_marriage.html', context)
 
 
+def sm_matching_suitors(request):
+    """ Retrieve all suitors """
+
+    num = int(request.session.get('num'))
+    if not num:
+        # Handle the case where 'num' is not set in the session
+        return redirect('match:stable_marriage')  # Redirect to a view that sets 'num'
+
+    SuitorFormSet = formset_factory(InputForm, min_num=int(num / 2), validate_min=True, extra=0)
+
+    if request.method == "POST":
+        # POST data submitted
+        suitors = SuitorFormSet(request.POST, prefix='suitors')
+
+        if suitors.is_valid():
+            for suitor in suitors:
+                cd = suitor.cleaned_data
+                name = cd.get('name')
+                StorageContainer.suitor_list.append(name)
+
+            return redirect("match:sm_matching_reviewers")  # Redirect to avoid re-submission
+        else:
+            print("Formsets are not valid")
+    else:
+        # no POST data
+        suitors = SuitorFormSet(prefix='suitors')
+
+    return render(request, 'match/sm_matching_suitors.html', {
+        'suitors': suitors,
+    })
+
+
+def sm_matching_reviewers(request):
+    """ Retrieve all reviewers """
+    num = int(request.session.get('num'))
+    if not num:
+        # Handle the case where 'num' is not set in the session
+        return redirect('match:stable_marriage')  # Redirect to a view that sets 'num'
+
+    ReviewerFormSet = formset_factory(InputForm, min_num=int(num / 2), validate_min=True, extra=0)
+
+    if request.method == "POST":
+        # POST data submitted
+        reviewers = ReviewerFormSet(request.POST)
+
+        if reviewers.is_valid():
+            for reviewer in reviewers:
+                cd = reviewer.cleaned_data
+                name = cd.get('name')
+                StorageContainer.reviewer_list.append(name)
+            return redirect("match:sm_matching_1")  # Redirect to avoid re-submission
+        else:
+            print("Reviewer formsets are not valid")
+    else:
+        # no POST data
+        reviewers = ReviewerFormSet()
+
+    return render(request, 'match/sm_matching_reviewers.html', {
+        'reviewers': reviewers
+    })
+
+
 def sm_matching(request):
     """The Stable Marriage Matching Page"""
 
@@ -86,74 +153,11 @@ def sm_matching(request):
     })
 
 
-def sm_matching_suitors(request):
-    """ Retrieve all suitors """
-
-    num = int(request.session.get('num'))
-    if not num:
-        # Handle the case where 'num' is not set in the session
-        return redirect('match:stable_marriage')  # Redirect to a view that sets 'num'
-
-    SuitorFormSet = formset_factory(InputForm, min_num=int(num / 2), validate_min=True, extra=0)
-
-    if request.method == "POST":
-        # POST data submitted
-        suitors = SuitorFormSet(request.POST, prefix='suitors')
-
-        if suitors.is_valid():
-            return redirect("match:sm_matching_reviewers")  # Redirect to avoid re-submission
-        else:
-            print("Formsets are not valid")
-    else:
-        # no POST data
-        suitors = SuitorFormSet(prefix='suitors')
-
-    return render(request, 'match/sm_matching_suitors.html', {
-        'suitors': suitors,
-    })
-
-
-def sm_matching_reviewers(request):
-    """ Retrieve all reviewers """
-    num = int(request.session.get('num'))
-    if not num:
-        # Handle the case where 'num' is not set in the session
-        return redirect('match:stable_marriage')  # Redirect to a view that sets 'num'
-
-    SuitorFormSet = formset_factory(InputForm, min_num=int(num / 2), validate_min=True, extra=0)
-    ReviewerFormSet = formset_factory(InputForm, min_num=int(num / 2), validate_min=True, extra=0)
-
-    if request.method == "POST":
-        # POST data submitted
-        suitors = SuitorFormSet(request.POST, prefix='suitors')
-        reviewers = ReviewerFormSet(request.POST, prefix='reviewers')
-
-        if suitors.is_valid():
-
-            return redirect("match:sm_matching_1")  # Redirect to avoid re-submission
-        else:
-            print("Formsets are not valid")
-    else:
-        # no POST data
-        reviewers = ReviewerFormSet(prefix='reviwers')
-        suitors = SuitorFormSet(prefix='suitors')
-
-    return render(request, 'match/sm_matching.html', {
-        'suitors': suitors,
-        'reviewers': reviewers
-    })
-
 def sm_matching_1(request):
     """The Stable Marriage Matching Pt. 2"""
 
     suitors = StorageContainer.suitor_list
     reviewers = StorageContainer.reviewer_list
-
-    for suitor in suitors:
-        print(suitor)
-
-    for reviewer in reviewers:
-        print(reviewer)
 
     suitors.clear()
     reviewers.clear()
@@ -168,8 +172,8 @@ def sm_matching_1(request):
     #         print("Formset is not valid")
     # else:
     #     formset = InputForm()
-
-    return render(request, 'match/sm_matching_1.html')
+    context = {'suitors': suitors, 'reviewers': reviewers}
+    return render(request, 'match/sm_matching_1.html', context)
 
 
 def sm_matching_complete(request):
@@ -209,4 +213,3 @@ def stable_roommate(request):
 def boehmer_heeger(request):
     """ Boehmer & Heeger's adapting stable marriage page """
     return render(request, 'match/boehmer_heeger.html')
-
