@@ -5,15 +5,17 @@ from matching.games import StableMarriage, StableRoommates
 from .forms import InputForm, IntegerInputForm, PrefsInputForm
 
 
+# to do add these two functions to a separate file called util
 class StorageContainer:
     dictionary = {}
     suitor_list = []
     reviewer_list = []
 
-    def clear(self):
-        self.suitor_list.clear()
-        self.reviewer_list.clear()
-        # self.dictionary.clear()
+
+def clear():
+    StorageContainer.suitor_list.clear()
+    StorageContainer.reviewer_list.clear()
+    StorageContainer.dictionary.clear()
 
 
 # views here.
@@ -61,6 +63,8 @@ def stable_marriage(request):
 
 def sm_matching_suitors(request):
     """ Retrieve all suitors """
+
+    clear()  # clear all items in class StorageContainer
 
     num = int(request.session.get('num'))
     if not num:
@@ -120,6 +124,7 @@ def sm_matching_reviewers(request):
         'reviewers': reviewers
     })
 
+
 def sm_matching(request):
     """The Stable Marriage Matching Pt. 2"""
 
@@ -128,21 +133,21 @@ def sm_matching(request):
 
     num = len(suitors) + len(reviewers)
 
-    PrefsFormSet = formset_factory(PrefsInputForm, min_num=int(num / 2), validate_min=True, extra=0)
+    PrefsFormSet = formset_factory(PrefsInputForm, min_num=1, validate_min=True, extra=0)
 
     if request.method == "POST":
         # POST data submitted
+        formset = PrefsFormSet(request.POST)
 
-        if PrefsFormSet.is_valid():
+        if formset.is_valid():
             # Perform matching logic or save data
-
             return redirect("match:sm_matching_complete")  # Redirect to avoid re-submission
         else:
             print("Formset is not valid")
     else:
         formset = PrefsFormSet()
 
-    context = {'suitors': suitors, 'reviewers': reviewers}
+    context = {'suitors': suitors, 'reviewers': reviewers, 'formset': formset}
     return render(request, 'match/sm_matching.html', context)
 
 
