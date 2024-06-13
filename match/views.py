@@ -2,7 +2,7 @@ from django.http import HttpResponseRedirect
 from django.shortcuts import render, redirect
 from django.forms import formset_factory
 from matching.games import StableMarriage, StableRoommates
-from .forms import InputForm, IntegerInputForm
+from .forms import InputForm, IntegerInputForm, PrefsInputForm
 
 
 class StorageContainer:
@@ -159,19 +159,22 @@ def sm_matching_1(request):
     suitors = StorageContainer.suitor_list
     reviewers = StorageContainer.reviewer_list
 
-    suitors.clear()
-    reviewers.clear()
-    # if request.method == "POST":
-    #     # POST data submitted
-    #
-    #     if formset.is_valid():
-    #         # Perform matching logic or save data
-    #
-    #         return redirect("match:sm_matching_1")  # Redirect to avoid re-submission
-    #     else:
-    #         print("Formset is not valid")
-    # else:
-    #     formset = InputForm()
+    num = len(suitors) + len(reviewers)
+
+    PrefsFormSet = formset_factory(PrefsInputForm, min_num=int(num / 2), validate_min=True, extra=0)
+
+    if request.method == "POST":
+        # POST data submitted
+
+
+        if PrefsFormSet.is_valid():
+            # Perform matching logic or save data
+
+            return redirect("match:sm_matching_1")  # Redirect to avoid re-submission
+        else:
+            print("Formset is not valid")
+    else:
+        formset = InputForm()
     context = {'suitors': suitors, 'reviewers': reviewers}
     return render(request, 'match/sm_matching_1.html', context)
 

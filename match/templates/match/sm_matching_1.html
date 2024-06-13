@@ -16,6 +16,14 @@
 
 <hr><h4>Initialization</h4>
 <h5>Now enter their preferences</h5>
+{% for suitor in suitors %}
+    <li>{{ suitor | safe }}</li>
+{% endfor %}
+
+{% for reviewer in reviewers %}
+    <li>{{ reviewer | safe }}</li>
+{% endfor %}
+
 <form action="{% url 'match:sm_matching_1' %}" method="post">
     {% csrf_token %}
         {{ formset.as_div }}
