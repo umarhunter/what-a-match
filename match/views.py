@@ -2,18 +2,24 @@ from django.http import HttpResponseRedirect
 from django.shortcuts import render, redirect
 from django.forms import formset_factory
 from matching.games import StableMarriage, StableRoommates
-from .forms import InputForm, IntegerInputForm
+from .forms import InputForm, IntegerInputForm, PrefsInputForm
 
 
+# to do add these two functions to a separate file called util
 class StorageContainer:
     dictionary = {}
     suitor_list = []
+    suitor_list_prefs = []
     reviewer_list = []
+    reviewer_list_prefs = []
 
-    def clear(self):
-        self.suitor_list.clear()
-        self.reviewer_list.clear()
-        # self.dictionary.clear()
+
+def clear():
+    StorageContainer.suitor_list.clear()
+    StorageContainer.reviewer_list.clear()
+    StorageContainer.dictionary.clear()
+    StorageContainer.suitor_list_prefs.clear()
+    StorageContainer.reviewer_list_prefs.clear()
 
 
 # views here.
@@ -62,6 +68,8 @@ def stable_marriage(request):
 def sm_matching_suitors(request):
     """ Retrieve all suitors """
 
+    clear()  # clear all items in class StorageContainer
+
     num = int(request.session.get('num'))
     if not num:
         # Handle the case where 'num' is not set in the session
@@ -109,7 +117,7 @@ def sm_matching_reviewers(request):
                 cd = reviewer.cleaned_data
                 name = cd.get('name')
                 StorageContainer.reviewer_list.append(name)
-            return redirect("match:sm_matching_1")  # Redirect to avoid re-submission
+            return redirect("match:sm_matching")  # Redirect to avoid re-submission
         else:
             print("Reviewer formsets are not valid")
     else:
@@ -122,64 +130,80 @@ def sm_matching_reviewers(request):
 
 
 def sm_matching(request):
-    """The Stable Marriage Matching Page"""
+    """Retrieve the preferences for suitors"""
+
+    suitors = StorageContainer.suitor_list
+    reviewers = StorageContainer.reviewer_list
+
+    num = len(suitors)
+
+    SuitorPrefsFormSet = formset_factory(PrefsInputForm, min_num=1, validate_min=True, extra=0)
+
+    if request.method == "POST":
+        # POST data submitted
+        formset = SuitorPrefsFormSet(request.POST)
+        if formset.is_valid():
+            # Perform matching logic or save data
+            for form in formset:
+                cd = form.cleaned_data
+                prefs = cd.get('Preferences')
+                StorageContainer.suitor_list_prefs.append(prefs)
+                return redirect("match:sm_matching_1")  # Redirect to avoid re-submission
+        else:
+            print("Formset is not valid")
+    else:
+        formset = SuitorPrefsFormSet()
+
+    context = {'suitors': suitors, 'reviewers': reviewers, 'formset': formset}
+    return render(request, 'match/sm_matching.html', context)
+
+def sm_matching_1(request):
+    """Retrieve the preferences for reviewers"""
+
+    suitors = StorageContainer.suitor_list
+    reviewers = StorageContainer.reviewer_list
+
+    num = len(suitors)
+
+    ReviewerPrefsFormSet = formset_factory(PrefsInputForm, min_num=1, validate_min=True, extra=0)
+
+    if request.method == "POST":
+        # POST data submitted
+        formset = ReviewerPrefsFormSet(request.POST)
+        if formset.is_valid():
+            # Perform matching logic or save data
+            for form in formset:
+                cd = form.cleaned_data
+                prefs = cd.get('Preferences')
+                StorageContainer.reviewer_list_prefs.append(prefs)
+                return redirect("match:sm_matching_complete")  # Redirect to avoid re-submission
+        else:
+            print("Formset is not valid")
+    else:
+        formset = ReviewerPrefsFormSet()
+
+    context = {'suitors': suitors, 'reviewers': reviewers, 'formset': formset}
+    return render(request, 'match/sm_matching_1.html', context)
+
+def sm_matching_complete(request):
+    """Displays the results of the SM matching"""
 
     num = int(request.session.get('num'))
     if not num:
         # Handle the case where 'num' is not set in the session
         return redirect('match:stable_marriage')  # Redirect to a view that sets 'num'
 
-    SuitorFormSet = formset_factory(InputForm, min_num=int(num / 2), validate_min=True, extra=0)
-    ReviewerFormSet = formset_factory(InputForm, min_num=int(num / 2), validate_min=True, extra=0)
 
     if request.method == "POST":
         # POST data submitted
-        suitors = SuitorFormSet(request.POST, prefix='suitors')
-        reviewers = ReviewerFormSet(request.POST, prefix='reviewers')
+            return redirect("match:sm_matching_complete")  # Redirect to avoid re-submission
 
-        if suitors.is_valid():
-
-            return redirect("match:sm_matching_1")  # Redirect to avoid re-submission
-        else:
-            print("Formsets are not valid")
     else:
         # no POST data
-        reviewers = ReviewerFormSet(prefix='reviwers')
-        suitors = SuitorFormSet(prefix='suitors')
+        pass
 
-    return render(request, 'match/sm_matching.html', {
-        'suitors': suitors,
-        'reviewers': reviewers
+    return render(request, 'match/sm_matching_complete.html', {
     })
-
-
-def sm_matching_1(request):
-    """The Stable Marriage Matching Pt. 2"""
-
-    suitors = StorageContainer.suitor_list
-    reviewers = StorageContainer.reviewer_list
-
-    suitors.clear()
-    reviewers.clear()
-    # if request.method == "POST":
-    #     # POST data submitted
-    #
-    #     if formset.is_valid():
-    #         # Perform matching logic or save data
-    #
-    #         return redirect("match:sm_matching_1")  # Redirect to avoid re-submission
-    #     else:
-    #         print("Formset is not valid")
-    # else:
-    #     formset = InputForm()
-    context = {'suitors': suitors, 'reviewers': reviewers}
-    return render(request, 'match/sm_matching_1.html', context)
-
-
-def sm_matching_complete(request):
-    """Displays the results of the SM matching"""
-
-    return render(request, 'match/sm_matching_complete.html', {})
 
 
 def stable_roommate(request):
@@ -213,3 +237,5 @@ def stable_roommate(request):
 def boehmer_heeger(request):
     """ Boehmer & Heeger's adapting stable marriage page """
     return render(request, 'match/boehmer_heeger.html')
+
+
