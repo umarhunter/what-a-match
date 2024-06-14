@@ -9,13 +9,17 @@ from .forms import InputForm, IntegerInputForm, PrefsInputForm
 class StorageContainer:
     dictionary = {}
     suitor_list = []
+    suitor_list_prefs = []
     reviewer_list = []
+    reviewer_list_prefs = []
 
 
 def clear():
     StorageContainer.suitor_list.clear()
     StorageContainer.reviewer_list.clear()
     StorageContainer.dictionary.clear()
+    StorageContainer.suitor_list_prefs.clear()
+    StorageContainer.reviewer_list_prefs.clear()
 
 
 # views here.
@@ -126,30 +130,60 @@ def sm_matching_reviewers(request):
 
 
 def sm_matching(request):
-    """The Stable Marriage Matching Pt. 2"""
+    """Retrieve the preferences for suitors"""
 
     suitors = StorageContainer.suitor_list
     reviewers = StorageContainer.reviewer_list
 
-    num = len(suitors) + len(reviewers)
+    num = len(suitors)
 
-    PrefsFormSet = formset_factory(PrefsInputForm, min_num=1, validate_min=True, extra=0)
+    SuitorPrefsFormSet = formset_factory(PrefsInputForm, min_num=1, validate_min=True, extra=0)
 
     if request.method == "POST":
         # POST data submitted
-        formset = PrefsFormSet(request.POST)
-
+        formset = SuitorPrefsFormSet(request.POST)
         if formset.is_valid():
             # Perform matching logic or save data
-            return redirect("match:sm_matching_complete")  # Redirect to avoid re-submission
+            for form in formset:
+                cd = form.cleaned_data
+                prefs = cd.get('Preferences')
+                StorageContainer.suitor_list_prefs.append(prefs)
+                return redirect("match:sm_matching_1")  # Redirect to avoid re-submission
         else:
             print("Formset is not valid")
     else:
-        formset = PrefsFormSet()
+        formset = SuitorPrefsFormSet()
 
     context = {'suitors': suitors, 'reviewers': reviewers, 'formset': formset}
     return render(request, 'match/sm_matching.html', context)
 
+def sm_matching_1(request):
+    """Retrieve the preferences for reviewers"""
+
+    suitors = StorageContainer.suitor_list
+    reviewers = StorageContainer.reviewer_list
+
+    num = len(suitors)
+
+    ReviewerPrefsFormSet = formset_factory(PrefsInputForm, min_num=1, validate_min=True, extra=0)
+
+    if request.method == "POST":
+        # POST data submitted
+        formset = ReviewerPrefsFormSet(request.POST)
+        if formset.is_valid():
+            # Perform matching logic or save data
+            for form in formset:
+                cd = form.cleaned_data
+                prefs = cd.get('Preferences')
+                StorageContainer.reviewer_list_prefs.append(prefs)
+                return redirect("match:sm_matching_complete")  # Redirect to avoid re-submission
+        else:
+            print("Formset is not valid")
+    else:
+        formset = ReviewerPrefsFormSet()
+
+    context = {'suitors': suitors, 'reviewers': reviewers, 'formset': formset}
+    return render(request, 'match/sm_matching_1.html', context)
 
 def sm_matching_complete(request):
     """Displays the results of the SM matching"""
@@ -159,27 +193,16 @@ def sm_matching_complete(request):
         # Handle the case where 'num' is not set in the session
         return redirect('match:stable_marriage')  # Redirect to a view that sets 'num'
 
-    SuitorFormSet = formset_factory(InputForm, min_num=int(num / 2), validate_min=True, extra=0)
-    ReviewerFormSet = formset_factory(InputForm, min_num=int(num / 2), validate_min=True, extra=0)
 
     if request.method == "POST":
         # POST data submitted
-        suitors = SuitorFormSet(request.POST, prefix='suitors')
-        reviewers = ReviewerFormSet(request.POST, prefix='reviewers')
+            return redirect("match:sm_matching_complete")  # Redirect to avoid re-submission
 
-        if suitors.is_valid():
-
-            return redirect("match:sm_matching_1")  # Redirect to avoid re-submission
-        else:
-            print("Formsets are not valid")
     else:
         # no POST data
-        reviewers = ReviewerFormSet(prefix='reviwers')
-        suitors = SuitorFormSet(prefix='suitors')
+        pass
 
-    return render(request, 'match/sm_matching.html', {
-        'suitors': suitors,
-        'reviewers': reviewers
+    return render(request, 'match/sm_matching_complete.html', {
     })
 
 
@@ -214,3 +237,5 @@ def stable_roommate(request):
 def boehmer_heeger(request):
     """ Boehmer & Heeger's adapting stable marriage page """
     return render(request, 'match/boehmer_heeger.html')
+
+
