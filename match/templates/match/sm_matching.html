@@ -23,16 +23,14 @@
     <ul>{{ suitor }}</ul>
     {{  formset.as_p }}
 {% endfor %}
-
-
-<br>
-<b>Reviewers</b>
-{% for reviewer in reviewers %}
-    <ul>{{ reviewer }}</ul>
-{% endfor %}
-
     <input type="submit" value="Submit">
 </form>
+<br>
+<b>Here are the list of reviewers (for reference)</b>
+{% for reviewer in reviewers %}
+    <li>{{ reviewer }}</li>
+{% endfor %}
+
 
 <br>
 </body>
