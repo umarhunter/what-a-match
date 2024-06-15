@@ -23,13 +23,12 @@
     <ul>{{ reviewer | safe }}</ul>
     {{  formset.as_p }}
 {% endfor %}
-
-
+<br>
 <b>Suitors</b>
 {% for suitor in suitors %}
     <ul>{{ suitor | safe }}</ul>
 {% endfor %}
-
+<br>
     <input type="submit" value="Submit">
 </form>
 

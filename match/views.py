@@ -89,7 +89,7 @@ def sm_matching_suitors(request):
 
             return redirect("match:sm_matching_reviewers")  # Redirect to avoid re-submission
         else:
-            print("Formsets are not valid")
+            pass
     else:
         # no POST data
         suitors = SuitorFormSet(prefix='suitors')
@@ -119,7 +119,7 @@ def sm_matching_reviewers(request):
                 StorageContainer.reviewer_list.append(name)
             return redirect("match:sm_matching")  # Redirect to avoid re-submission
         else:
-            print("Reviewer formsets are not valid")
+            pass
     else:
         # no POST data
         reviewers = ReviewerFormSet()
@@ -150,7 +150,7 @@ def sm_matching(request):
                 StorageContainer.suitor_list_prefs.append(prefs)
                 return redirect("match:sm_matching_1")  # Redirect to avoid re-submission
         else:
-            print("Formset is not valid")
+            raise Exception()
     else:
         formset = SuitorPrefsFormSet()
 
@@ -178,7 +178,7 @@ def sm_matching_1(request):
                 StorageContainer.reviewer_list_prefs.append(prefs)
                 return redirect("match:sm_matching_complete")  # Redirect to avoid re-submission
         else:
-            print("Formset is not valid")
+            pass
     else:
         formset = ReviewerPrefsFormSet()
 
