@@ -20,7 +20,7 @@
     {% csrf_token %}
 <b>Suitors</b>
 {% for suitor in suitors %}
-    <ul>{{ suitor | safe }}</ul>
+    <ul>{{ suitor }}</ul>
     {{  formset.as_p }}
 {% endfor %}
 
@@ -28,7 +28,7 @@
 <br>
 <b>Reviewers</b>
 {% for reviewer in reviewers %}
-    <ul>{{ reviewer | safe }}</ul>
+    <ul>{{ reviewer }}</ul>
 {% endfor %}
 
     <input type="submit" value="Submit">
