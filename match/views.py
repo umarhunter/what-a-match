@@ -5,21 +5,21 @@ from matching.games import StableMarriage, StableRoommates
 from .forms import InputForm, IntegerInputForm, PrefsInputForm
 
 
-# to do add these two functions to a separate file called util
-class StorageContainer:
-    dictionary = {}
-    suitor_list = []
-    suitor_list_prefs = []
-    reviewer_list = []
-    reviewer_list_prefs = []
-
-
-def clear():
-    StorageContainer.suitor_list.clear()
-    StorageContainer.reviewer_list.clear()
-    StorageContainer.dictionary.clear()
-    StorageContainer.suitor_list_prefs.clear()
-    StorageContainer.reviewer_list_prefs.clear()
+# redundant code, to delete
+# class StorageContainer:
+#     dictionary = {}
+#     suitor_list = []
+#     suitor_list_prefs = []
+#     reviewer_list = []
+#     reviewer_list_prefs = []
+#
+#
+# def clear():
+#     StorageContainer.suitor_list.clear()
+#     StorageContainer.reviewer_list.clear()
+#     StorageContainer.dictionary.clear()
+#     StorageContainer.suitor_list_prefs.clear()
+#     StorageContainer.reviewer_list_prefs.clear()
 
 
 # views here.
@@ -68,8 +68,6 @@ def stable_marriage(request):
 def sm_matching_suitors(request):
     """ Retrieve all suitors """
 
-    clear()  # clear all items in class StorageContainer
-
     num = int(request.session.get('num'))
     if not num:
         # Handle the case where 'num' is not set in the session
@@ -82,11 +80,12 @@ def sm_matching_suitors(request):
         suitors = SuitorFormSet(request.POST, prefix='suitors')
 
         if suitors.is_valid():
+            suitor_list = []
             for suitor in suitors:
                 cd = suitor.cleaned_data
                 name = cd.get('name')
-                StorageContainer.suitor_list.append(name)
-
+                suitor_list.append(name)
+            request.session['suitor_list'] = suitor_list
             return redirect("match:sm_matching_reviewers")  # Redirect to avoid re-submission
         else:
             pass
@@ -113,10 +112,13 @@ def sm_matching_reviewers(request):
         reviewers = ReviewerFormSet(request.POST)
 
         if reviewers.is_valid():
+            reviewer_list = []
             for reviewer in reviewers:
                 cd = reviewer.cleaned_data
                 name = cd.get('name')
-                StorageContainer.reviewer_list.append(name)
+                reviewer_list.append(name)
+
+            request.session['reviewer_list'] = reviewer_list
             return redirect("match:sm_matching")  # Redirect to avoid re-submission
         else:
             pass
@@ -132,8 +134,8 @@ def sm_matching_reviewers(request):
 def sm_matching(request):
     """Retrieve the preferences for suitors"""
 
-    suitors = StorageContainer.suitor_list
-    reviewers = StorageContainer.reviewer_list
+    suitors = request.session['suitor_list']
+    reviewers = request.session['reviewer_list']
 
     num = len(suitors)
 
@@ -143,12 +145,14 @@ def sm_matching(request):
         # POST data submitted
         formset = SuitorPrefsFormSet(request.POST)
         if formset.is_valid():
-            # Perform matching logic or save data
+            suitor_list_prefs = []
+
             for form in formset:
                 cd = form.cleaned_data
                 prefs = cd.get('Preferences')
-                StorageContainer.suitor_list_prefs.append(prefs)
-                return redirect("match:sm_matching_1")  # Redirect to avoid re-submission
+                suitor_list_prefs.append(prefs)
+            request.session['suitor_list_prefs'] = suitor_list_prefs
+            return redirect("match:sm_matching_1")  # Redirect to avoid re-submission
         else:
             raise Exception()
     else:
@@ -157,11 +161,12 @@ def sm_matching(request):
     context = {'suitors': suitors, 'reviewers': reviewers, 'formset': formset}
     return render(request, 'match/sm_matching.html', context)
 
+
 def sm_matching_1(request):
     """Retrieve the preferences for reviewers"""
 
-    suitors = StorageContainer.suitor_list
-    reviewers = StorageContainer.reviewer_list
+    suitors = request.session['suitor_list']
+    reviewers = request.session['reviewer_list']
 
     num = len(suitors)
 
@@ -171,19 +176,21 @@ def sm_matching_1(request):
         # POST data submitted
         formset = ReviewerPrefsFormSet(request.POST)
         if formset.is_valid():
-            # Perform matching logic or save data
+            reviewer_list_prefs = []
+
             for form in formset:
                 cd = form.cleaned_data
                 prefs = cd.get('Preferences')
-                StorageContainer.reviewer_list_prefs.append(prefs)
-                return redirect("match:sm_matching_complete")  # Redirect to avoid re-submission
+                reviewer_list_prefs.append(prefs)
+            return redirect("match:sm_matching_complete")  # Redirect to avoid re-submission
         else:
-            pass
+            raise Exception()
     else:
         formset = ReviewerPrefsFormSet()
 
     context = {'suitors': suitors, 'reviewers': reviewers, 'formset': formset}
     return render(request, 'match/sm_matching_1.html', context)
+
 
 def sm_matching_complete(request):
     """Displays the results of the SM matching"""
@@ -193,10 +200,9 @@ def sm_matching_complete(request):
         # Handle the case where 'num' is not set in the session
         return redirect('match:stable_marriage')  # Redirect to a view that sets 'num'
 
-
     if request.method == "POST":
         # POST data submitted
-            return redirect("match:sm_matching_complete")  # Redirect to avoid re-submission
+        return redirect("match:sm_matching_complete")  # Redirect to avoid re-submission
 
     else:
         # no POST data
@@ -237,5 +243,3 @@ def stable_roommate(request):
 def boehmer_heeger(request):
     """ Boehmer & Heeger's adapting stable marriage page """
     return render(request, 'match/boehmer_heeger.html')
-
-
