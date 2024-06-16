@@ -7,7 +7,7 @@ A long term goal is to incorporate illustrations of Niclas Boehmer & Klaus Heege
 
 ## Demo
 
-This project is **not complete** as of right now. Nevertheless, current progress can be seen on the [deployed website](https://whatamatch-06b09a339de1.herokuapp.com/).
+This project is **not complete** as of right now, currently only the Stable Marriage problem works. Current progress can be seen on the [deployed website](https://whatamatch-06b09a339de1.herokuapp.com/).
 
 ## Local Installation
 
