@@ -172,7 +172,7 @@ def sm_matching_1(request):
 
     num = len(suitors)
 
-    ReviewerPrefsFormSet = formset_factory(PrefsInputForm, min_num=1, validate_min=True, extra=0)
+    ReviewerPrefsFormSet = formset_factory(PrefsInputForm, min_num=num, validate_min=True, extra=0)
 
     if request.method == "POST":
         # POST data submitted
@@ -209,24 +209,23 @@ def sm_matching_complete(request):
     reviewer_prefs = {}
 
     index = 0
-    for suitor in suitors:
+    for this_suitor_pref in suitor_list_prefs:
         try:
-            #for i in range(len(suitor_list_prefs)):
-            suitor_prefs[suitor] = suitor_list_prefs[0][index]
+            suitor_prefs[suitors[index]] = this_suitor_pref
+            index += 1
         except IndexError:
             print("size of suitors list is", len(suitors))
             print("size of suitor_list_prefs is", len(suitor_list_prefs))
             print(suitor_list_prefs)
-        index += 1
 
     index = 0
-    for reviewer in reviewers:
-        reviewer_prefs[reviewer] = reviewer_list_prefs[0][index]
-        index += 1
-
-    print(suitor_list_prefs)
-    print(suitor_list_prefs[0])
-
+    for this_reviewer_pref in reviewer_list_prefs:
+        try:
+            reviewer_prefs[reviewers[index]] = this_reviewer_pref
+            index += 1
+        except IndexError:
+            print("size of reviewer list is", len(reviewers))
+            print("size of reviewer_list_prefs is", len(reviewer_list_prefs))
 
     print(suitor_prefs)
     print(reviewer_prefs)
@@ -252,8 +251,7 @@ def sm_matching_complete(request):
                'suitor_prefs_dict': suitor_prefs,
                'reviewer_prefs_dict': reviewer_prefs,
                'int_form': int_form}
-    return render(request, 'match/sm_matching_complete.html', {
-    })
+    return render(request, 'match/sm_matching_complete.html', context)
 
 
 def stable_roommate(request):
