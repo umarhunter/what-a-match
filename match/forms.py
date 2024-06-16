@@ -14,6 +14,7 @@ class InputForm(forms.Form):
             raise forms.ValidationError("Name must be longer than 1 letter")
 
 
+
 class PrefsInputForm(forms.Form):
     preferences = forms.CharField()
 
@@ -34,3 +35,5 @@ class IntegerInputForm(forms.ModelForm):
         number = cd.get('number')
         if number % 2 != 0:
             raise forms.ValidationError("Number must be an even number.")
+        elif number > 10:
+            raise forms.ValidationError("As this is just a demo, please use a sample of <= 10")

@@ -13,24 +13,25 @@
 {% block content %}
 <body>
 <hr><h4>Initialization</h4>
-<h5>Now enter their preferences <b>separated by a comma.</b> Otherwise it won't work.</h5>
+<h5>Now enter their preferences of the reviewer's <b>separated by a comma.</b> Otherwise it won't work.</h5>
 <br>
+
+<b>Reviewers</b>
+{% for reviewer in reviewers %}
+    <li>{{ reviewer }}</li>
+{% endfor %}
 
 <form action="{% url 'match:sm_matching_1' %}" method="post">
     {% csrf_token %}
-<b>Reviewers</b>
-{% for reviewer in reviewers %}
-    <ul>{{ reviewer }}</ul>
-    {{  formset.as_p }}
-{% endfor %}
-<br>
-<b>Suitors</b>
-{% for suitor in suitors %}
-    <ul>{{ suitor }}</ul>
-{% endfor %}
-<br>
+    {{ formset.as_p }}
     <input type="submit" value="Submit">
 </form>
+
+<br>
+<b>Here are the list of suitors (for your reference)</b>
+{% for suitor in suitors %}
+    <li>{{ suitor }}</li>
+{% endfor %}
 
 <br>
 </body>
