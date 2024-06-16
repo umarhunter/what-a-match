@@ -4,25 +4,7 @@ from django.forms import formset_factory
 from matching.games import StableMarriage, StableRoommates
 from .forms import InputForm, IntegerInputForm, PrefsInputForm
 
-import re
-# redundant code, to delete
-# class StorageContainer:
-#     dictionary = {}
-#     suitor_list = []
-#     suitor_list_prefs = []
-#     reviewer_list = []
-#     reviewer_list_prefs = []
-#
-#
-# def clear():
-#     StorageContainer.suitor_list.clear()
-#     StorageContainer.reviewer_list.clear()
-#     StorageContainer.dictionary.clear()
-#     StorageContainer.suitor_list_prefs.clear()
-#     StorageContainer.reviewer_list_prefs.clear()
 
-
-# views here.
 def stable_marriage(request):
     """The Stable Marriage (Gale & Shapley) page"""
 
