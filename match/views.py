@@ -4,7 +4,7 @@ from django.forms import formset_factory
 from matching.games import StableMarriage, StableRoommates
 from .forms import InputForm, IntegerInputForm, PrefsInputForm
 
-
+import re
 # redundant code, to delete
 # class StorageContainer:
 #     dictionary = {}
@@ -139,7 +139,7 @@ def sm_matching(request):
 
     num = len(suitors)
 
-    SuitorPrefsFormSet = formset_factory(PrefsInputForm, min_num=1, validate_min=True, extra=0)
+    SuitorPrefsFormSet = formset_factory(PrefsInputForm, min_num=num, validate_min=True, extra=0)
 
     if request.method == "POST":
         # POST data submitted
@@ -149,12 +149,14 @@ def sm_matching(request):
 
             for form in formset:
                 cd = form.cleaned_data
-                prefs = cd.get('Preferences')
-                suitor_list_prefs.append(prefs)
+                prefs = cd.get('preferences')
+                parsed_prefs = prefs.split(',')
+                suitor_list_prefs.append(parsed_prefs)
+
             request.session['suitor_list_prefs'] = suitor_list_prefs
             return redirect("match:sm_matching_1")  # Redirect to avoid re-submission
         else:
-            raise Exception()
+            raise Exception("INVALID FORM DETECTED")
     else:
         formset = SuitorPrefsFormSet()
 
@@ -180,8 +182,11 @@ def sm_matching_1(request):
 
             for form in formset:
                 cd = form.cleaned_data
-                prefs = cd.get('Preferences')
-                reviewer_list_prefs.append(prefs)
+                prefs = cd.get('preferences')
+                parsed_prefs = prefs.split(',')
+                reviewer_list_prefs.append(parsed_prefs)
+
+            request.session['reviewer_list_prefs'] = reviewer_list_prefs
             return redirect("match:sm_matching_complete")  # Redirect to avoid re-submission
         else:
             raise Exception()
@@ -195,19 +200,58 @@ def sm_matching_1(request):
 def sm_matching_complete(request):
     """Displays the results of the SM matching"""
 
-    num = int(request.session.get('num'))
-    if not num:
-        # Handle the case where 'num' is not set in the session
-        return redirect('match:stable_marriage')  # Redirect to a view that sets 'num'
+    suitors = request.session['suitor_list']
+    reviewers = request.session['reviewer_list']
+    suitor_list_prefs = request.session['suitor_list_prefs']
+    reviewer_list_prefs = request.session['reviewer_list_prefs']
 
+    suitor_prefs = {}
+    reviewer_prefs = {}
+
+    index = 0
+    for suitor in suitors:
+        try:
+            #for i in range(len(suitor_list_prefs)):
+            suitor_prefs[suitor] = suitor_list_prefs[0][index]
+        except IndexError:
+            print("size of suitors list is", len(suitors))
+            print("size of suitor_list_prefs is", len(suitor_list_prefs))
+            print(suitor_list_prefs)
+        index += 1
+
+    index = 0
+    for reviewer in reviewers:
+        reviewer_prefs[reviewer] = reviewer_list_prefs[0][index]
+        index += 1
+
+    print(suitor_list_prefs)
+    print(suitor_list_prefs[0])
+
+
+    print(suitor_prefs)
+    print(reviewer_prefs)
+
+    # set-up dictionaries with player information's before solving
+    game = StableMarriage.create_from_dictionaries(
+        suitor_prefs, reviewer_prefs
+    )
+    results = game.solve()
+
+    # POST data submitted; we may now process form inputs
     if request.method == "POST":
-        # POST data submitted
-        return redirect("match:sm_matching_complete")  # Redirect to avoid re-submission
-
+        int_form = IntegerInputForm(request.POST)
+        num = int_form['number'].value()
+        if int_form.is_valid():
+            request.session['num'] = num
+            return redirect('match:sm_matching_suitors')
     else:
-        # no POST data
-        pass
+        # no POST data, create a new/blank form
+        int_form = IntegerInputForm()  # we need to know the number of individuals
 
+    context = {'results': results,
+               'suitor_prefs_dict': suitor_prefs,
+               'reviewer_prefs_dict': reviewer_prefs,
+               'int_form': int_form}
     return render(request, 'match/sm_matching_complete.html', {
     })
 

@@ -16,21 +16,22 @@
 <h5>Now enter their preferences <b>separated by a comma.</b> Otherwise it won't work.</h5>
 <br>
 
-<form action="{% url 'match:sm_matching_1' %}" method="post">
-    {% csrf_token %}
 <b>Reviewers</b>
 {% for reviewer in reviewers %}
-    <ul>{{ reviewer }}</ul>
-    {{  formset.as_p }}
+    <li>{{ reviewer }}</li>
 {% endfor %}
-<br>
-<b>Suitors</b>
-{% for suitor in suitors %}
-    <ul>{{ suitor }}</ul>
-{% endfor %}
-<br>
+
+<form action="{% url 'match:sm_matching' %}" method="post">
+    {% csrf_token %}
+    {{ formset.as_p }}
     <input type="submit" value="Submit">
 </form>
+
+<br>
+<b>Here are the list of suitors (for reference)</b>
+{% for suitor in suitors %}
+    <li>{{ reviewer }}</li>
+{% endfor %}
 
 <br>
 </body>
