@@ -3,6 +3,7 @@ from django.shortcuts import render, redirect
 from django.forms import formset_factory
 from matching.games import StableMarriage, StableRoommates
 from .forms import InputForm, IntegerInputForm, PrefsInputForm
+import re
 
 
 def stable_marriage(request):
@@ -132,7 +133,8 @@ def sm_matching(request):
             for form in formset:
                 cd = form.cleaned_data
                 prefs = cd.get('preferences')
-                parsed_prefs = prefs.split(',')
+                parsed_prefs = re.split("[\s,]+", prefs)
+                # parsed_prefs = prefs.split(',')
                 suitor_list_prefs.append(parsed_prefs)
 
             request.session['suitor_list_prefs'] = suitor_list_prefs
@@ -165,7 +167,8 @@ def sm_matching_1(request):
             for form in formset:
                 cd = form.cleaned_data
                 prefs = cd.get('preferences')
-                parsed_prefs = prefs.split(',')
+                parsed_prefs = re.split("[\s,]+", prefs)
+                #parsed_prefs = prefs.split(',')
                 reviewer_list_prefs.append(parsed_prefs)
 
             request.session['reviewer_list_prefs'] = reviewer_list_prefs
