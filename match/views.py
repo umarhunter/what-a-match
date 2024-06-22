@@ -10,17 +10,17 @@ def stable_marriage(request):
 
     # initialization for demo
     suitor_prefs = {
-        'David': ['Emily', 'Olivia', 'Sophie', 'Eleanor'],
-        'Daniel': ['Sophie', 'Olivia', 'Emily', 'Eleanor'],
-        'Andrew': ['Eleanor', 'Sophie', 'Olivia', 'Emily'],
-        'Ryan': ['Emily', 'Olivia', 'Sophie', 'Eleanor']
+        'Caleb': ['Daniel', 'May', 'Ryan', 'Sadab'],
+        'Mark': ['May', 'Ryan', 'Sadab', 'Daniel'],
+        'Song': ['Sadab', 'Ryan', 'May', 'Daniel'],
+        'Marcos': ['Daniel', 'Ryan', 'Sadab', 'May'],
     }
 
     reviewer_prefs = {
-        'Emily': ['David', 'Ryan', 'Daniel', 'Andrew'],
-        'Olivia': ['Daniel', 'Andrew', 'David', 'Ryan'],
-        'Sophie': ['David', 'Daniel', 'Andrew', 'Ryan'],
-        'Eleanor': ['Andrew', 'Ryan', 'Daniel', 'David']
+        'Sadab': ['Song', 'Mark', 'Caleb', 'Marcos'],
+        'Ryan': ['Mark', 'Song', 'Caleb', 'Marcos'],
+        'Daniel': ['Marcos', 'Mark', 'Caleb', 'Song'],
+        'May': ['Mark', 'Caleb', 'Song', 'Marcos'],
     }
 
     # set-up dictionaries with player information's before solving
