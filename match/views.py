@@ -260,8 +260,52 @@ def stable_roommate(request):
     game = StableRoommates.create_from_dictionary(suitor_with_prefs)
     results = game.solve()
 
-    return render(request, 'match/stable_roommate.html', {'results': results,
-                                                          'suitor_prefs_dict': suitor_with_prefs})
+    # POST data submitted; we may now process form inputs
+    if request.method == "POST":
+        int_form = IntegerInputForm(request.POST)
+        num = int_form['number'].value()
+        if int_form.is_valid():
+            request.session['num'] = num
+            return redirect('match:sr_matching')
+    else:
+        # no POST data, create a new/blank form
+        int_form = IntegerInputForm()  # we need to know the number of individuals
+
+    return render(request, 'match/stable_roommate.html', {
+        'results': results,
+        'suitor_prefs_dict': suitor_with_prefs,
+        'int_form': int_form,
+    })
+
+
+def sr_matching(request):
+    num = int(request.session.get('num'))
+    if not num:
+        # Handle the case where 'num' is not set in the session
+        return redirect('match:stable_roommate')  # Redirect to a view that sets 'num'
+
+    SuitorFormSet = formset_factory(InputForm, min_num=int(num / 2), validate_min=True, extra=0)
+
+    if request.method == "POST":
+        # POST data submitted
+        suitors = SuitorFormSet(request.POST, prefix='suitors')
+
+        if suitors.is_valid():
+            suitor_list = []
+            for suitor in suitors:
+                cd = suitor.cleaned_data
+                name = cd.get('name')
+                suitor_list.append(name)
+            request.session['suitor_list'] = suitor_list
+            return redirect("match:sm_matching_reviewers")  # Redirect to avoid re-submission
+        else:
+            pass
+    else:
+        # no POST data
+        suitors = SuitorFormSet(prefix='suitors')
+
+    return render(request, 'match/sm_matching_suitors.html', {
+        'suitors': suitors})
 
 
 def boehmer_heeger(request):
