@@ -42,6 +42,17 @@
     {% endfor %}
 </table>
 
+<h4>Try it yourself!</h4>
+<form action="{% url 'match:stable_marriage' %}" method='post'>
+    {% csrf_token %}
+    <p>Start by entering the total number of people being matched (from both sets):</p>
+    {{ int_form.as_div }}
+    <input type="submit" value="Submit">
+</form>
+<br><br>
+<br>
+<hr>
+
 <p>[*] Robert W. Irving, "An efficient algorithm for the “stable roommates” problem",
     Journal of Algorithms, Volume 6, Issue 4, 1985, Pages 577-595</p>
 </body>

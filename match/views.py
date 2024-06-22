@@ -1,4 +1,3 @@
-from django.http import HttpResponseRedirect
 from django.shortcuts import render, redirect
 from django.forms import formset_factory
 from matching.games import StableMarriage, StableRoommates
@@ -11,17 +10,17 @@ def stable_marriage(request):
 
     # initialization for demo
     suitor_prefs = {
-        'David': ['Emily', 'Olivia', 'Sophie', 'Eleanor'],
-        'Daniel': ['Sophie', 'Olivia', 'Emily', 'Eleanor'],
-        'Andrew': ['Eleanor', 'Sophie', 'Olivia', 'Emily'],
-        'Ryan': ['Emily', 'Olivia', 'Sophie', 'Eleanor']
+        'Caleb': ['Daniel', 'May', 'Ryan', 'Sadab'],
+        'Mark': ['May', 'Ryan', 'Sadab', 'Daniel'],
+        'Song': ['Sadab', 'Ryan', 'May', 'Daniel'],
+        'Marcos': ['Daniel', 'Ryan', 'Sadab', 'May'],
     }
 
     reviewer_prefs = {
-        'Emily': ['David', 'Ryan', 'Daniel', 'Andrew'],
-        'Olivia': ['Daniel', 'Andrew', 'David', 'Ryan'],
-        'Sophie': ['David', 'Daniel', 'Andrew', 'Ryan'],
-        'Eleanor': ['Andrew', 'Ryan', 'Daniel', 'David']
+        'Sadab': ['Song', 'Mark', 'Caleb', 'Marcos'],
+        'Ryan': ['Mark', 'Song', 'Caleb', 'Marcos'],
+        'Daniel': ['Marcos', 'Mark', 'Caleb', 'Song'],
+        'May': ['Mark', 'Caleb', 'Song', 'Marcos'],
     }
 
     # set-up dictionaries with player information's before solving
@@ -134,7 +133,6 @@ def sm_matching(request):
                 cd = form.cleaned_data
                 prefs = cd.get('preferences')
                 parsed_prefs = re.split("[\s,]+", prefs)
-                # parsed_prefs = prefs.split(',')
                 suitor_list_prefs.append(parsed_prefs)
 
             request.session['suitor_list_prefs'] = suitor_list_prefs
@@ -168,7 +166,6 @@ def sm_matching_1(request):
                 cd = form.cleaned_data
                 prefs = cd.get('preferences')
                 parsed_prefs = re.split("[\s,]+", prefs)
-                #parsed_prefs = prefs.split(',')
                 reviewer_list_prefs.append(parsed_prefs)
 
             request.session['reviewer_list_prefs'] = reviewer_list_prefs
@@ -263,8 +260,52 @@ def stable_roommate(request):
     game = StableRoommates.create_from_dictionary(suitor_with_prefs)
     results = game.solve()
 
-    return render(request, 'match/stable_roommate.html', {'results': results,
-                                                          'suitor_prefs_dict': suitor_with_prefs})
+    # POST data submitted; we may now process form inputs
+    if request.method == "POST":
+        int_form = IntegerInputForm(request.POST)
+        num = int_form['number'].value()
+        if int_form.is_valid():
+            request.session['num'] = num
+            return redirect('match:sr_matching')
+    else:
+        # no POST data, create a new/blank form
+        int_form = IntegerInputForm()  # we need to know the number of individuals
+
+    return render(request, 'match/stable_roommate.html', {
+        'results': results,
+        'suitor_prefs_dict': suitor_with_prefs,
+        'int_form': int_form,
+    })
+
+
+def sr_matching(request):
+    num = int(request.session.get('num'))
+    if not num:
+        # Handle the case where 'num' is not set in the session
+        return redirect('match:stable_roommate')  # Redirect to a view that sets 'num'
+
+    SuitorFormSet = formset_factory(InputForm, min_num=int(num / 2), validate_min=True, extra=0)
+
+    if request.method == "POST":
+        # POST data submitted
+        suitors = SuitorFormSet(request.POST, prefix='suitors')
+
+        if suitors.is_valid():
+            suitor_list = []
+            for suitor in suitors:
+                cd = suitor.cleaned_data
+                name = cd.get('name')
+                suitor_list.append(name)
+            request.session['suitor_list'] = suitor_list
+            return redirect("match:sm_matching_reviewers")  # Redirect to avoid re-submission
+        else:
+            pass
+    else:
+        # no POST data
+        suitors = SuitorFormSet(prefix='suitors')
+
+    return render(request, 'match/sm_matching_suitors.html', {
+        'suitors': suitors})
 
 
 def boehmer_heeger(request):
