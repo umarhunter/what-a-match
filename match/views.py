@@ -1,4 +1,3 @@
-from django.http import HttpResponseRedirect
 from django.shortcuts import render, redirect
 from django.forms import formset_factory
 from matching.games import StableMarriage, StableRoommates
@@ -134,7 +133,6 @@ def sm_matching(request):
                 cd = form.cleaned_data
                 prefs = cd.get('preferences')
                 parsed_prefs = re.split("[\s,]+", prefs)
-                # parsed_prefs = prefs.split(',')
                 suitor_list_prefs.append(parsed_prefs)
 
             request.session['suitor_list_prefs'] = suitor_list_prefs
@@ -168,7 +166,6 @@ def sm_matching_1(request):
                 cd = form.cleaned_data
                 prefs = cd.get('preferences')
                 parsed_prefs = re.split("[\s,]+", prefs)
-                #parsed_prefs = prefs.split(',')
                 reviewer_list_prefs.append(parsed_prefs)
 
             request.session['reviewer_list_prefs'] = reviewer_list_prefs
