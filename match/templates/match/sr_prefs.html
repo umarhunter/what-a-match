@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+{% extends 'what_a_match/base.html' %}
+
+<head>
+    <meta charset="UTF-8">
+    <title>Stable Marriage Matching</title>
+</head>
+{% block page_header %}
+  <h2>SM Matching</h2>
+{% endblock page_header %}
+
+{% block content %}
+<body>
+<hr><h4>Initialization</h4>
+<h5>Now enter preferences of the suitor's <b>separated by a comma.</b> Otherwise it won't work.</h5>
+<br>
+
+<b>Roommates :D</b>
+{% for roomie in roommates %}
+    <li>{{ roomie }}</li>
+{% endfor %}
+
+<form action="{% url 'match:sr_prefs' %}" method="post">
+    {% csrf_token %}
+    {{ formset.as_p }}
+    <input type="submit" value="Submit">
+</form>
+
+<br>
+<b>Here are the list of all roommates (for your reference)</b>
+{% for roomie in roommates %}
+    <li>{{ roomie }}</li>
+{% endfor %}
+
+
+<br>
+</body>
+{% endblock content %}
+</html>
