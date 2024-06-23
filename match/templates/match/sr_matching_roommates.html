@@ -18,15 +18,13 @@
 <h5>Enter all suitors to be matched</h5>
 <br>
 <b>Suitors</b>
-<form action="{% url 'match:sr_matching_suitors' %}" method="post">
+<form action="{% url 'match:sr_matching_roommates' %}" method="post">
     {% csrf_token %}
-        {{ suitors.management_form }}
-        {{ suitors.as_p }}
+        {{ sr_suitors.management_form }}
+        {{ sr_suitors.as_p }}
     <input type="submit" value="Submit">
 </form>
 <br>
-
-
 <br>
 
 </body>

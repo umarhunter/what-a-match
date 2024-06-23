@@ -34,7 +34,7 @@ urlpatterns = [
 
     # Stable roommate page
     path('stable_roommate/', views.stable_roommate, name='stable_roommate'),
-    path('sr_matching_suitors/', views.sr_matching_suitors, name='sr_matching_suitors'),
+    path('sr_matching_roommates/', views.sr_matching_roommates, name='sr_matching_roommates'),
     path('sr_matching/', views.sr_matching, name='sr_matching'),
 
     # Boehmer & Heeger page

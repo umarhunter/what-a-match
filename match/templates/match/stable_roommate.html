@@ -18,22 +18,21 @@
     Irving's paper describes an O(n^2) algorithm that will determine, for any instance of the problem, whether a stable matching exists,
     and if so, will find that matching.
 </p>
-<h5><b>Set A</b> (only single set needed for the SR problem)</h5>
+<hr>
+<h5><u><b>Set A</b></u> (only single set needed for the SR problem)</h5>
 <table>
-    {% for suitor,prefs in suitor_prefs_dict.items %}
+    {% for suitor,prefs in sr_suitor_prefs_dict.items %}
         <tr>
             <th>{{suitor}}</th>
             <td>{{prefs}}</td>
         </tr>
     {% endfor %}
     </table>
-<br>
-
+<hr>
 {# results #}
-<br>
-<h5><b>Results</b></h5>
+<h5><u><b>Results</b></u></h5>
 <table class="border-bottom pb-2 mb-4 list-group-item border-0">
-    {% for match,partner in results.items %}
+    {% for match,partner in sr_results.items %}
       <tr>
           <td><b>{{match}}</b> matched with <b>{{partner}}</b></td>
       </tr>
@@ -43,10 +42,10 @@
 </table>
 
 <h4>Try it yourself!</h4>
-<form action="{% url 'match:sr_matching' %}" method='post'>
+<form action="{% url 'match:stable_roommate' %}" method='post'>
     {% csrf_token %}
     <p>Start by entering the total number of people being matched (from both sets):</p>
-    {{ int_form.as_div }}
+    {{ sr_int_form.as_div }}
     <input type="submit" value="Submit">
 </form>
 <br><br>

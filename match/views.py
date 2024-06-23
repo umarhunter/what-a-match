@@ -236,54 +236,53 @@ def stable_roommate(request):
             suitor_with_prefs[player].extend(list(missing_players))
 
     game = StableRoommates.create_from_dictionary(suitor_with_prefs)
-    results = game.solve()
+    sr_results = game.solve()
 
     # POST data submitted; we may now process form inputs
     if request.method == "POST":
         int_form = IntegerInputForm(request.POST)
         num = int_form['number'].value()
         if int_form.is_valid():
-            request.session['num'] = num
-            return redirect('match:sr_matching_suitors')
+            request.session['sr_num'] = num
+            return redirect('match:sr_matching_roommates')
     else:
         # no POST data, create a new/blank form
         int_form = IntegerInputForm()  # we need to know the number of individuals
 
     return render(request, 'match/stable_roommate.html', {
-        'results': results,
-        'suitor_prefs_dict': suitor_with_prefs,
-        'int_form': int_form,
+        'sr_results': sr_results,
+        'sr_suitor_prefs_dict': suitor_with_prefs,
+        'sr_int_form': int_form,
     })
 
 
-def sr_matching_suitors(request):
-    num = int(request.session.get('num'))
+def sr_matching_roommates(request):
+    """ Retrieve the name of all roommates """
+    num = int(request.session.get('sr_num'))
     if not num:
         # Handle the case where 'num' is not set in the session
         return redirect('match:stable_roommate')  # Redirect to a view that sets 'num'
 
-    SuitorFormSet = formset_factory(InputForm, min_num=int(num), validate_min=True, extra=0)
+    NewSuitorFormSet = formset_factory(InputForm, min_num=int(num), validate_min=True, extra=0)
 
     if request.method == "POST":
         # POST data submitted
-        suitors = SuitorFormSet(request.POST, prefix='suitors')
+        sr_suitors = NewSuitorFormSet(request.POST, prefix='sr_suitors')
 
-        if suitors.is_valid():
+        if sr_suitors.is_valid():
             sr_suitor_list = []
-            for suitor in suitors:
+            for suitor in sr_suitors:
                 cd = suitor.cleaned_data
                 name = cd.get('name')
                 sr_suitor_list.append(name)
             request.session['sr_suitor_list'] = sr_suitor_list
             return redirect("match:sr_matching")  # Redirect to avoid re-submission
-        else:
-            pass
     else:
         # no POST data
-        suitors = SuitorFormSet(prefix='suitors')
+        sr_suitors = NewSuitorFormSet(prefix='sr_suitors')
 
-    return render(request, 'match/sr_matching_suitors.html', {
-        'suitors': suitors,
+    return render(request, 'match/sr_matching_roommates.html', {
+        'sr_suitors': sr_suitors,
     })
 
 
@@ -293,23 +292,23 @@ def sr_matching(request):
     sr_suitors = request.session['sr_suitor_list']
     sr_suitor_list_prefs = request.session['sr_suitor_list_prefs']
 
-    suitor_prefs = {}
+    sr_suitor_prefs = {}
 
     index = 0
     for this_suitor_pref in sr_suitor_list_prefs:
-        suitor_prefs[sr_suitors[index]] = this_suitor_pref
+        sr_suitor_prefs[sr_suitors[index]] = this_suitor_pref
         index += 1
 
     # set-up dictionaries with player information's before solving
     game = StableRoommates.create_from_dictionary(
-        suitor_prefs,
+        sr_suitor_prefs,
     )
 
     results = game.solve()
 
     context = {
-        'results': results,
-        'sr_suitor_prefs_dict': suitor_prefs,
+        'sr_results': results,
+        'sr_suitor_prefs_dict': sr_suitor_prefs,
     }
     return render(request, 'match/sr_matching_complete.html', context)
 
