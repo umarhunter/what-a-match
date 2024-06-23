@@ -200,28 +200,17 @@ def sm_matching_complete(request):
         reviewer_prefs[reviewers[index]] = this_reviewer_pref
         index += 1
 
-
     # set-up dictionaries with player information's before solving
     game = StableMarriage.create_from_dictionaries(
         suitor_prefs, reviewer_prefs
     )
     results = game.solve()
 
-    # POST data submitted; we may now process form inputs
-    if request.method == "POST":
-        int_form = IntegerInputForm(request.POST)
-        num = int_form['number'].value()
-        if int_form.is_valid():
-            request.session['num'] = num
-            return redirect('match:sm_matching_suitors')
-    else:
-        # no POST data, create a new/blank form
-        int_form = IntegerInputForm()  # we need to know the number of individuals
-
-    context = {'results': results,
-               'suitor_prefs_dict': suitor_prefs,
-               'reviewer_prefs_dict': reviewer_prefs,
-               'int_form': int_form}
+    context = {
+        'results': results,
+        'suitor_prefs_dict': suitor_prefs,
+        'reviewer_prefs_dict': reviewer_prefs,
+    }
     return render(request, 'match/sm_matching_complete.html', context)
 
 
@@ -280,12 +269,12 @@ def sr_matching_suitors(request):
         suitors = SuitorFormSet(request.POST, prefix='suitors')
 
         if suitors.is_valid():
-            suitor_list = []
+            sr_suitor_list = []
             for suitor in suitors:
                 cd = suitor.cleaned_data
                 name = cd.get('name')
-                suitor_list.append(name)
-            request.session['suitor_list'] = suitor_list
+                sr_suitor_list.append(name)
+            request.session['sr_suitor_list'] = sr_suitor_list
             return redirect("match:sr_matching")  # Redirect to avoid re-submission
         else:
             pass
@@ -294,46 +283,37 @@ def sr_matching_suitors(request):
         suitors = SuitorFormSet(prefix='suitors')
 
     return render(request, 'match/sr_matching_suitors.html', {
-        'suitors': suitors})
+        'suitors': suitors,
+    })
+
 
 def sr_matching(request):
     """Displays the results of the SR matching"""
 
-    suitors = request.session['suitor_list']
-    suitor_list_prefs = request.session['suitor_list_prefs']
+    sr_suitors = request.session['sr_suitor_list']
+    sr_suitor_list_prefs = request.session['sr_suitor_list_prefs']
 
     suitor_prefs = {}
-    reviewer_prefs = {}
 
     index = 0
-    for this_suitor_pref in suitor_list_prefs:
-        suitor_prefs[suitors[index]] = this_suitor_pref
+    for this_suitor_pref in sr_suitor_list_prefs:
+        suitor_prefs[sr_suitors[index]] = this_suitor_pref
         index += 1
 
     # set-up dictionaries with player information's before solving
-    game = StableMarriage.create_from_dictionaries(
-        suitor_prefs, reviewer_prefs
+    game = StableRoommates.create_from_dictionary(
+        suitor_prefs,
     )
+
     results = game.solve()
 
-    # POST data submitted; we may now process form inputs
-    if request.method == "POST":
-        int_form = IntegerInputForm(request.POST)
-        num = int_form['number'].value()
-        if int_form.is_valid():
-            request.session['num'] = num
-            return redirect('match:sm_matching_suitors')
-    else:
-        # no POST data, create a new/blank form
-        int_form = IntegerInputForm()  # we need to know the number of individuals
+    context = {
+        'results': results,
+        'sr_suitor_prefs_dict': suitor_prefs,
+    }
+    return render(request, 'match/sr_matching_complete.html', context)
 
-    context = {'results': results,
-               'suitor_prefs_dict': suitor_prefs,
-               'int_form': int_form}
-    return render(request, 'match/sm_matching_complete.html', context)
 
 def boehmer_heeger(request):
     """ Boehmer & Heeger's adapting stable marriage page """
     return render(request, 'match/boehmer_heeger.html')
-
-

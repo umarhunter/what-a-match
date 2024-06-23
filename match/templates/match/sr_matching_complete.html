@@ -4,11 +4,11 @@
 
 <head>
     <meta charset="UTF-8">
-    <title>Stable Marriage Matching</title>
+    <title>Stable Roommate Matching</title>
 </head>
 
 {% block page_header %}
-  <h2>SM Matching</h2>
+  <h2>SR Matching</h2>
 {% endblock page_header %}
 
 {% block content %}
@@ -19,7 +19,7 @@
 <hr><h4>Results</h4>
 <hr>
 
-<h5><b>Suitors</b> (this was your <i>set A</i> for the SM problem)</h5>
+<h5><b>All Suitors</b> (this was your <i>set A</i> for the SR problem)</h5>
 <table>
     {% for suitor,prefs in suitor_prefs_dict.items %}
         <tr>
@@ -29,15 +29,6 @@
     {% endfor %}
     </table>
 <br>
-<h5><b>Reviewers</b> (this was your <i>set B</i> for the SM problem)</h5>
-<table>
-    {% for suitor,prefs in reviewer_prefs_dict.items %}
-        <tr>
-            <th>{{suitor}}'s preferences: </th>
-            <td>{{prefs}}</td>
-        </tr>
-    {% endfor %}
-    </table>
 <hr>
 
 <h4><b>Results</b></h4>

@@ -3,7 +3,7 @@
 {% extends 'what_a_match/base.html' %}
 <head>
     <meta charset="UTF-8">
-    <title>Stable Rooommate</title>
+    <title>Stable Roommate</title>
 </head>
 {% block page_header %}
   <h2>Stable Roommate</h2>
@@ -43,7 +43,7 @@
 </table>
 
 <h4>Try it yourself!</h4>
-<form action="{% url 'match:stable_roommate' %}" method='post'>
+<form action="{% url 'match:sr_matching' %}" method='post'>
     {% csrf_token %}
     <p>Start by entering the total number of people being matched (from both sets):</p>
     {{ int_form.as_div }}
