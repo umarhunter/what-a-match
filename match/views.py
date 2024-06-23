@@ -186,9 +186,9 @@ def sm_matching_complete(request):
     reviewers = request.session['reviewer_list']
     suitor_list_prefs = request.session['suitor_list_prefs']
     reviewer_list_prefs = request.session['reviewer_list_prefs']
-
     suitor_prefs = {}
     reviewer_prefs = {}
+
 
     index = 0
     for this_suitor_pref in suitor_list_prefs:
@@ -199,6 +199,20 @@ def sm_matching_complete(request):
     for this_reviewer_pref in reviewer_list_prefs:
         reviewer_prefs[reviewers[index]] = this_reviewer_pref
         index += 1
+
+
+    # Ensure that each player has ranked all other players
+    set_of_players = set(suitor_prefs.keys())
+    set_of_reviewers = set(reviewer_prefs.keys())
+    for player, preferences in suitor_prefs.items():
+        if set(preferences) != set_of_reviewers:
+            missing_players = set_of_reviewers - set(preferences)
+            suitor_prefs[player].extend(list(missing_players))
+
+    for player, preferences in reviewer_prefs.items():
+        if set(preferences) != set_of_players:
+            missing_players = set_of_players - set(preferences)
+            reviewer_prefs[player].extend(list(missing_players))
 
     # set-up dictionaries with player information's before solving
     game = StableMarriage.create_from_dictionaries(

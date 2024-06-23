@@ -12,23 +12,21 @@
 
 {% block content %}
 <body>
-<p>This page will allow the user to enter names of persons to be matched. </p>
 
-<hr><h4>Initialization</h4>
-<h5>Enter all reviewers to be matched</h5>
+<br><h4>Initialization</h4>
+<hr>
+<div class ='reviewers'>
+<h5>Enter the names of all reviewers to be matched</h5>
 <br>
-<b>Reviewers</b>
+<h5><b>Reviewers</b></h5>
 <form action="{% url 'match:sm_matching_reviewers' %}" method="post">
     {% csrf_token %}
         {{ reviewers.management_form }}
         {{ reviewers.as_p }}
     <input type="submit" value="Submit">
 </form>
-<br>
-
-
-<br>
-
+</div>
+<style>.reviewers{ text-align: center; }</style>
 </body>
 {% endblock content %}
 </html>
