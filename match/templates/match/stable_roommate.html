@@ -43,7 +43,7 @@
 </table>
 
 <h4>Try it yourself!</h4>
-<form action="{% url 'match:stable_marriage' %}" method='post'>
+<form action="{% url 'match:stable_roommate' %}" method='post'>
     {% csrf_token %}
     <p>Start by entering the total number of people being matched (from both sets):</p>
     {{ int_form.as_div }}

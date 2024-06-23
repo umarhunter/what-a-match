@@ -192,25 +192,14 @@ def sm_matching_complete(request):
 
     index = 0
     for this_suitor_pref in suitor_list_prefs:
-        try:
-            suitor_prefs[suitors[index]] = this_suitor_pref
-            index += 1
-        except IndexError:
-            print("size of suitors list is", len(suitors))
-            print("size of suitor_list_prefs is", len(suitor_list_prefs))
-            print(suitor_list_prefs)
+        suitor_prefs[suitors[index]] = this_suitor_pref
+        index += 1
 
     index = 0
     for this_reviewer_pref in reviewer_list_prefs:
-        try:
-            reviewer_prefs[reviewers[index]] = this_reviewer_pref
-            index += 1
-        except IndexError:
-            print("size of reviewer list is", len(reviewers))
-            print("size of reviewer_list_prefs is", len(reviewer_list_prefs))
+        reviewer_prefs[reviewers[index]] = this_reviewer_pref
+        index += 1
 
-    print(suitor_prefs)
-    print(reviewer_prefs)
 
     # set-up dictionaries with player information's before solving
     game = StableMarriage.create_from_dictionaries(
@@ -266,7 +255,7 @@ def stable_roommate(request):
         num = int_form['number'].value()
         if int_form.is_valid():
             request.session['num'] = num
-            return redirect('match:sr_matching')
+            return redirect('match:sr_matching_suitors')
     else:
         # no POST data, create a new/blank form
         int_form = IntegerInputForm()  # we need to know the number of individuals
@@ -278,7 +267,7 @@ def stable_roommate(request):
     })
 
 
-def sr_matching(request):
+def sr_matching_suitors(request):
     num = int(request.session.get('num'))
     if not num:
         # Handle the case where 'num' is not set in the session
@@ -297,17 +286,21 @@ def sr_matching(request):
                 name = cd.get('name')
                 suitor_list.append(name)
             request.session['suitor_list'] = suitor_list
-            return redirect("match:sm_matching_reviewers")  # Redirect to avoid re-submission
+            return redirect("match:sr_matching")  # Redirect to avoid re-submission
         else:
             pass
     else:
         # no POST data
         suitors = SuitorFormSet(prefix='suitors')
 
-    return render(request, 'match/sm_matching_suitors.html', {
+    return render(request, 'match/sr_matching_suitors.html', {
         'suitors': suitors})
 
+def sr_matching(request):
+    return None
 
 def boehmer_heeger(request):
     """ Boehmer & Heeger's adapting stable marriage page """
     return render(request, 'match/boehmer_heeger.html')
+
+
