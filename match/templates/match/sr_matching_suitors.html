@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+{% extends 'what_a_match/base.html' %}
+
+<head>
+    <meta charset="UTF-8">
+    <title>Stable Marriage Matching</title>
+</head>
+{% block page_header %}
+  <h2>SM Matching</h2>
+{% endblock page_header %}
+
+{% block content %}
+<body>
+<p>This page will allow the user to enter names of suitors to be matched. </p>
+
+<hr><h4>Initialization</h4>
+<h5>Enter all suitors to be matched</h5>
+<br>
+<b>Suitors</b>
+<form action="{% url 'match:sm_matching_suitors' %}" method="post">
+    {% csrf_token %}
+        {{ suitors.management_form }}
+        {{ suitors.as_p }}
+    <input type="submit" value="Submit">
+</form>
+<br>
+
+
+<br>
+
+</body>
+{% endblock content %}
+</html>

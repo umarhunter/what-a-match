@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+{% extends 'what_a_match/base.html' %}
+
+<head>
+    <meta charset="UTF-8">
+    <title>Stable Marriage Matching</title>
+</head>
+
+{% block page_header %}
+  <h2>SM Matching</h2>
+{% endblock page_header %}
+
+{% block content %}
+<body>
+<div class="loader"></div>
+<p>Match completed successfully!</p>
+<div class="loader"></div>
+<hr><h4>Results</h4>
+<hr>
+
+<h5><b>Suitors</b> (this was your <i>set A</i> for the SM problem)</h5>
+<table>
+    {% for suitor,prefs in suitor_prefs_dict.items %}
+        <tr>
+            <th>{{suitor}}'s preferences: </th>
+            <td>{{prefs}}</td>
+        </tr>
+    {% endfor %}
+    </table>
+<br>
+<h5><b>Reviewers</b> (this was your <i>set B</i> for the SM problem)</h5>
+<table>
+    {% for suitor,prefs in reviewer_prefs_dict.items %}
+        <tr>
+            <th>{{suitor}}'s preferences: </th>
+            <td>{{prefs}}</td>
+        </tr>
+    {% endfor %}
+    </table>
+<hr>
+
+<h4><b>Results</b></h4>
+<table class="border-bottom pb-2 mb-4 list-group-item border-0">
+    {% for match,partner in results.items %}
+      <tr>
+          <td><b>{{match}}</b> matched with <b>{{partner}}</b></td>
+      </tr>
+    {% empty %}
+      <li class="list-group-item border-0">No existing matchings could be made.</li>
+    {% endfor %}
+</table>
+
+<br><br>
+<br>
+<hr>
+[*] Gale, D., and L. S. Shapley. “College Admissions and the Stability of Marriage.” The American Mathematical Monthly, vol. 69, no. 1, 1962, pp. 9–15. JSTOR, https://doi.org/10.2307/2312726.<br>
+</body>
+{% endblock content %}
+</html>

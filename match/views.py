@@ -273,7 +273,7 @@ def sr_matching_suitors(request):
         # Handle the case where 'num' is not set in the session
         return redirect('match:stable_roommate')  # Redirect to a view that sets 'num'
 
-    SuitorFormSet = formset_factory(InputForm, min_num=int(num / 2), validate_min=True, extra=0)
+    SuitorFormSet = formset_factory(InputForm, min_num=int(num), validate_min=True, extra=0)
 
     if request.method == "POST":
         # POST data submitted
@@ -297,7 +297,40 @@ def sr_matching_suitors(request):
         'suitors': suitors})
 
 def sr_matching(request):
-    return None
+    """Displays the results of the SR matching"""
+
+    suitors = request.session['suitor_list']
+    suitor_list_prefs = request.session['suitor_list_prefs']
+
+    suitor_prefs = {}
+    reviewer_prefs = {}
+
+    index = 0
+    for this_suitor_pref in suitor_list_prefs:
+        suitor_prefs[suitors[index]] = this_suitor_pref
+        index += 1
+
+    # set-up dictionaries with player information's before solving
+    game = StableMarriage.create_from_dictionaries(
+        suitor_prefs, reviewer_prefs
+    )
+    results = game.solve()
+
+    # POST data submitted; we may now process form inputs
+    if request.method == "POST":
+        int_form = IntegerInputForm(request.POST)
+        num = int_form['number'].value()
+        if int_form.is_valid():
+            request.session['num'] = num
+            return redirect('match:sm_matching_suitors')
+    else:
+        # no POST data, create a new/blank form
+        int_form = IntegerInputForm()  # we need to know the number of individuals
+
+    context = {'results': results,
+               'suitor_prefs_dict': suitor_prefs,
+               'int_form': int_form}
+    return render(request, 'match/sm_matching_complete.html', context)
 
 def boehmer_heeger(request):
     """ Boehmer & Heeger's adapting stable marriage page """
