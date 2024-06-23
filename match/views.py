@@ -276,7 +276,7 @@ def sr_matching_roommates(request):
                 name = cd.get('name')
                 sr_suitor_list.append(name)
             request.session['sr_suitor_list'] = sr_suitor_list
-            return redirect("match:sr_matching")  # Redirect to avoid re-submission
+            return redirect("match:sr_prefs")  # Redirect to avoid re-submission
     else:
         # no POST data
         sr_suitors = NewSuitorFormSet(prefix='sr_suitors')
@@ -286,7 +286,39 @@ def sr_matching_roommates(request):
     })
 
 
-def sr_matching(request):
+def sr_prefs(request):
+    """Retrieve the preferences for all roommates"""
+
+    suitors = request.session['sr_suitor_list']
+
+    num = len(suitors)
+
+    SuitorPrefsFormSet = formset_factory(PrefsInputForm, min_num=num, validate_min=True, extra=0)
+
+    if request.method == "POST":
+        # POST data submitted
+        formset = SuitorPrefsFormSet(request.POST)
+        if formset.is_valid():
+            suitor_list_prefs = []
+
+            for form in formset:
+                cd = form.cleaned_data
+                prefs = cd.get('preferences')
+                parsed_prefs = re.split("[\s,]+", prefs)
+                suitor_list_prefs.append(parsed_prefs)
+
+            request.session['sr_suitor_list_prefs'] = suitor_list_prefs
+            return redirect("match:sr_matching_complete")  # Redirect to avoid re-submission
+        else:
+            raise Exception("INVALID FORM DETECTED")
+    else:
+        formset = SuitorPrefsFormSet()
+
+    context = {'roommates': suitors, 'formset': formset}
+    return render(request, 'match/sr_prefs.html', context)
+
+
+def sr_matching_complete(request):
     """Displays the results of the SR matching"""
 
     sr_suitors = request.session['sr_suitor_list']
@@ -299,11 +331,14 @@ def sr_matching(request):
         sr_suitor_prefs[sr_suitors[index]] = this_suitor_pref
         index += 1
 
-    # set-up dictionaries with player information's before solving
-    game = StableRoommates.create_from_dictionary(
-        sr_suitor_prefs,
-    )
+    # Ensure that each player has ranked all other players
+    players = set(sr_suitor_prefs.keys())
+    for player, preferences in sr_suitor_prefs.items():
+        if set(preferences) != players - {player}:
+            missing_players = players - set(preferences) - {player}
+            sr_suitor_prefs[player].extend(list(missing_players))
 
+    game = StableRoommates.create_from_dictionary(sr_suitor_prefs)
     results = game.solve()
 
     context = {
