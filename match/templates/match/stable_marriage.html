@@ -20,9 +20,10 @@
     no individual has an incentive to break their current pairing for an alternative one.
     This algorithm has widespread applications, from matchmaking in dating platforms to solving complex scenarios like
     job placements, where maintaining stability and fairness in partnerships is crucial.</p>
-
-<hr><h4>Demo</h4>
-<h5><b>Set A</b> (this is the <i>first</i> set for the SM problem)</h5>
+<hr>
+<h4>Demo</h4>
+<hr>
+<h5><u><b>Set A</b></u> (this is the <i>first</i> set for the SM problem)</h5>
 <table>
     {% for suitor,prefs in suitor_prefs_dict.items %}
         <tr>
@@ -32,7 +33,7 @@
     {% endfor %}
     </table>
 <br>
-<h5><b>Set B</b> (this is the <i>second</i> set for the SM problem)</h5>
+<h5><u><b>Set B</b></u> (this is the <i>second</i> set for the SM problem)</h5>
 <table>
     {% for suitor,prefs in reviewer_prefs_dict.items %}
         <tr>
@@ -44,7 +45,7 @@
 <hr>
 
 {# results #}
-<h4><b>Results</b></h4>
+<h5><u><b>Results</b></u></h5>
 <table class="border-bottom pb-2 mb-4 list-group-item border-0">
     {% for match,partner in results.items %}
       <tr>
@@ -59,7 +60,7 @@
 <form action="{% url 'match:stable_marriage' %}" method='post'>
     {% csrf_token %}
     <p>Start by entering the total number of people being matched (from both sets):</p>
-    {{ int_form.as_div }}
+    {{ int_form.as_table }}
     <input type="submit" value="Submit">
 </form>
 <br><br>

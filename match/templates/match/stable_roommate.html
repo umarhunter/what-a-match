@@ -3,10 +3,10 @@
 {% extends 'what_a_match/base.html' %}
 <head>
     <meta charset="UTF-8">
-    <title>Stable Roommate</title>
+    <title>Stable Roommates</title>
 </head>
 {% block page_header %}
-  <h2>Stable Roommate</h2>
+  <h2>Stable Roommates</h2>
 {% endblock page_header %}
 
 {% block content %}
@@ -18,6 +18,8 @@
     Irving's paper describes an O(n^2) algorithm that will determine, for any instance of the problem, whether a stable matching exists,
     and if so, will find that matching.
 </p>
+<hr>
+<h4>Demo</h4>
 <hr>
 <h5><u><b>Set A</b></u> (only single set needed for the SR problem)</h5>
 <table>
@@ -45,7 +47,7 @@
 <form action="{% url 'match:stable_roommate' %}" method='post'>
     {% csrf_token %}
     <p>Start by entering the total number of people being matched (from both sets):</p>
-    {{ sr_int_form.as_div }}
+    {{ sr_int_form.as_table }}
     <input type="submit" value="Submit">
 </form>
 <br><br>
