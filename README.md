@@ -27,10 +27,20 @@ Install all dependencies with Anaconda (creating a new environment)
 ```bash
   conda env create -f environment.yml
 ```
-Activate the new environment
 
+__Alternative__: Create an empty conda environment
+```bash
+  conda create --name <my_env>
+```
+
+Activate the new environment
 ```bash
   conda activate my_env
+```
+
+Install requirements
+```bash
+  pip install -r requirements.txt
 ```
 ## Run Locally
 
