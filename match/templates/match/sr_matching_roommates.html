@@ -12,12 +12,13 @@
 
 {% block content %}
 <body>
-<p>This page will allow the user to enter names of all roommates to be matched. </p>
-
-<hr><h4>Initialization</h4>
+<br>
+<h4>Initialization</h4><hr>
+<div class="align">
+<br>
 <h5>Enter all suitors to be matched</h5>
 <br>
-<b>Suitors</b>
+<h5><b>Suitors</b></h5>
 <form action="{% url 'match:sr_matching_roommates' %}" method="post">
     {% csrf_token %}
         {{ sr_suitors.management_form }}
@@ -26,7 +27,9 @@
 </form>
 <br>
 <br>
-
+</div>
 </body>
+    <style> .align{ text-align: center; }</style>
+
 {% endblock content %}
 </html>

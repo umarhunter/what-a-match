@@ -12,13 +12,16 @@
 
 {% block content %}
 <body>
-<hr><h4>Initialization</h4>
-<h5>Now enter preferences of the suitor's <b>separated by a comma.</b> Otherwise it won't work.</h5>
 <br>
+<h4>Initialization</h4><hr>
 
-<b>Suitors</b>
+<div class="align">
+<h5>Now enter preferences of the suitor's <b>separated by a comma.</b> Otherwise it won't work.</h5> <i>Please note: What-A-Match will fill in missing preferences on your behalf, this is to prevent any bugs.</i>
+<br>
+<hr>
+<h5><b><u>Suitors</u></b></h5>
 {% for suitor in suitors %}
-    <li>{{ suitor }}</li>
+    <p>{{ suitor }}</p>
 {% endfor %}
 
 <form action="{% url 'match:sm_matching' %}" method="post">
@@ -30,11 +33,13 @@
 <br>
 <b>Here are the list of reviewers (for your reference)</b>
 {% for reviewer in reviewers %}
-    <li>{{ reviewer }}</li>
+    <p>{{ reviewer }}</p>
 {% endfor %}
 
 
 <br>
+</div>
 </body>
+    <style>.align{ text-align: center; }</style>
 {% endblock content %}
 </html>

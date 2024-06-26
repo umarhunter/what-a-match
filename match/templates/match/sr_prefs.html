@@ -13,12 +13,13 @@
 {% block content %}
 <body>
 <hr><h4>Initialization</h4>
-<h5>Now enter preferences of the suitor's <b>separated by a comma.</b> Otherwise it won't work.</h5>
+<h5>Now enter preferences of the suitor's <b>separated by a comma.</b> Otherwise it won't work.</h5> <i>Please note: What-A-Match will fill in missing preferences on your behalf, this is to prevent any bugs.</i>
 <br>
-
+<br>
+<div class="form">
 <b>Roommates :D</b>
 {% for roomie in roommates %}
-    <li>{{ roomie }}</li>
+    <p>{{ roomie }}</p>
 {% endfor %}
 
 <form action="{% url 'match:sr_prefs' %}" method="post">
@@ -30,11 +31,12 @@
 <br>
 <b>Here are the list of all roommates (for your reference)</b>
 {% for roomie in roommates %}
-    <li>{{ roomie }}</li>
+    <p>{{ roomie }}</p>
 {% endfor %}
 
-
+</div>
 <br>
 </body>
+    <style>.form{ text-align: center; }</style>
 {% endblock content %}
 </html>
