@@ -1,7 +1,9 @@
 
 # What-a-Match
 
-This project provides a demonstration of Gale-Shapley's (1962) and Irving's (1985) algorithms for Stable Matching and Stable Roommate (respectively) using the open-source Python ```matching``` library. This project was created as my final project for Hunter College's **CSCI49387: Distributed Artificial Intelligence** taught by Dr. Anita Raja. 
+This project provides a demonstration of Gale-Shapley's (1962) and Irving's (1985) algorithms for Stable Matching and Stable Roommate (respectively) using the open-source Python ```matching``` library. This project was created as my final project for Hunter College's **CSCI49387: Distributed Artificial Intelligence** taught by Dr. Anita Raja.
+
+The purpose of this project is to familiarize students with how matching algorithms function by providing an easy to use UI to run demo matches.
 
 A long term goal is to incorporate illustrations of Niclas Boehmer & Klaus Heeger's paper "Adapting Stable Matchings to Forced and Forbidden Pairs" [[AAMAS 2023]](https://arxiv.org/abs/2204.10040) so we can adapt our matches as the scenarios shift. 
 
@@ -22,13 +24,13 @@ Navigate to the project's directory
 ```bash
   cd what-a-match
 ```
-Install all dependencies with Anaconda (creating a new environment)
+__Option 1__: Install all dependencies with Anaconda (creating a new environment)
 
 ```bash
   conda env create -f environment.yml
 ```
 
-__Alternative__: Create an empty conda environment
+__Option 2__: Create an empty conda environment
 ```bash
   conda create --name <my_env>
 ```
