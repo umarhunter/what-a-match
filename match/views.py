@@ -254,14 +254,14 @@ def stable_roommate(request):
     """The Stable Roommate (Robert Irving) page"""
 
     suitor_with_prefs = {
-        'David': ['Emily', 'Olivia', 'Sophie', 'Eleanor'],
-        'Daniel': ['Sophie', 'Olivia', 'Emily', 'Eleanor'],
-        'Andrew': ['Eleanor', 'Sophie', 'Olivia', 'Emily'],
-        'Ryan': ['Emily', 'Olivia', 'Sophie', 'Eleanor'],
-        'Emily': ['David', 'Ryan', 'Daniel', 'Andrew'],
-        'Olivia': ['Daniel', 'Andrew', 'David', 'Ryan'],
-        'Sophie': ['David', 'Daniel', 'Andrew', 'Ryan'],
-        'Eleanor': ['Andrew', 'Ryan', 'Daniel', 'David'],
+        'Caleb': ['Sadab', 'Ryan', 'Alex', 'Luis'],
+        'May': ['Yoomin', 'Sadab', 'Ryan', 'Alex'],
+        'Luis': ['Yoomin', 'Sadab', 'Ryan', 'Alex'],
+        'Sadab': ['Ryan', 'Alex', 'Luis', 'Caleb'],
+        'Ryan': ['Alex', 'Luis', 'Caleb', 'Amber'],
+        'Alex': ['May', 'Yoomin', 'Sadab', 'Ryan'],
+        'Yoomin': ['Sadab', 'Ryan', 'Alex', 'Luis'],
+        'Amber': ['Ryan', 'Alex', 'Luis', 'Caleb'],
     }
 
     # Ensure that each player has ranked all other players
