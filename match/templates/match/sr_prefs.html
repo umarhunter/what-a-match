@@ -12,12 +12,11 @@
 
 {% block content %}
 <body>
+<br><h4>Initialization</h4><hr>
 <div class="align">
-<hr><h4>Initialization</h4>
-<h5>Now enter preferences of the suitor's <b>separated by a comma.</b> Otherwise it won't work.</h5> <i>Please note: What-A-Match will fill in missing preferences on your behalf, this is to prevent any bugs.</i>
+<h5>Now enter the preferences of each roommate, <b>separated by a comma.</b> Otherwise it won't work.</h5> <i>Please note: What-A-Match will fill in missing preferences on your behalf, this is to prevent any bugs.</i>
+<hr>
 <br>
-<br>
-<div class="form">
 <b>Roommates :D</b>
 <form action="{% url 'match:sr_prefs' %}" method="post">
     {% csrf_token %}
@@ -37,8 +36,7 @@
 
 </div>
 <br>
-</div>
 </body>
-    <style>.form{ text-align: center; }</style>
+    <style>.align{ text-align: center; }</style>
 {% endblock content %}
 </html>
