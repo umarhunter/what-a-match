@@ -4,55 +4,46 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>What-A-Match</title>
-  {% load django_bootstrap5 %}
-  {% bootstrap_css %}
-  {% bootstrap_javascript %}
-    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
-    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+  <!-- Use the Bootswatch Pulse theme -->
+  <link href="https://cdn.jsdelivr.net/npm/bootswatch@5.3.3/dist/pulse/bootstrap.min.css" rel="stylesheet">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
 
 </head>
 <body>
   <nav class="navbar navbar-expand-sm bg-primary navbar-dark mb-4 border justify-content-center">
     <div class="container-fluid">
-      <a class="navbar-brand" href="{% url 'what_a_match:index' %}">
-          What-a-Match</a>
-
+      <a class="navbar-brand" href="{% url 'what_a_match:index' %}">What-a-Match</a>
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
         data-bs-target="#navbarCollapse" aria-controls="navbarCollapse"
         aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
-
       <div class="collapse navbar-collapse" id="navbarCollapse">
-          <ul class="navbar-nav mx-auto">
-              <li class="nav-item">
-                  <a class="nav-link" href="{% url 'match:stable_marriage' %}">
-                      Stable Marriage</a></li>
-              <li class="nav-item">
-                  <a class="nav-link" href="{% url 'match:stable_roommate' %}">
-                      Stable Roommates</a></li>
-              <li class="nav-item">
-                  <a class="nav-link" href="{% url 'match:boehmer_heeger' %}">
-                      Boehmer & Heeger</a></li>
-              <li class="nav-item">
-                  <a class="nav-link" href="https://github.com/umarhunter/what-a-match/">
-                      Repo</a></li>
-
-        </ul> <!-- End of links on left side of navbar -->
-      </div> <!-- Closes collapsible parts of navbar -->
-
-    </div> <!-- Closes navbar's container -->
-  </nav> <!-- End of navbar -->
-
+        <ul class="navbar-nav mx-auto">
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'match:stable_marriage' %}">Stable Marriage</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'match:stable_roommate' %}">Stable Roommates</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'match:boehmer_heeger' %}">Boehmer & Heeger</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="https://github.com/umarhunter/what-a-match/">Repo</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
   <main class="container">
     <div class="pb-2 mb-2 border-bottom">
       {% block page_header %}{% endblock page_header %}
     </div>
-
     <div>
       {% block content %}{% endblock content %}
     </div>
   </main>
-
 </body>
 </html>

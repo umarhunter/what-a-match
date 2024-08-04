@@ -33,15 +33,14 @@
 <table>
     {% for suitor,prefs in reviewer_prefs_dict.items %}
         <tr>
-            <th>{{suitor}}'s preferences: </th>
-            <td>{{prefs}}</td>
+            <th>{{suitor}}'s preferences:</th> <td>{{prefs}}</td>
         </tr>
     {% endfor %}
     </table>
 <hr>
 
 <h4><b>Results</b></h4>
-<table class="border-bottom pb-2 mb-4 list-group-item border-0">
+<table class="table table-bordered">
     {% for match,partner in results.items %}
       <tr>
           <td><b>{{match}}</b> matched with <b>{{partner}}</b></td>
