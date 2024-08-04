@@ -25,7 +25,7 @@
     {% csrf_token %}
     {{ formset.management_form }}
     {% for suitor, form in suitors_forms %}
-        <p><b>{{ suitor }}</b>'s {{ form.preferences }}</p>
+        <p><b>{{ suitor }}</b>'s {{ form.preferences.label_tag }} {{ form.preferences }}</p>
     {% endfor %}
     <input type="submit" value="Submit">
 </form>

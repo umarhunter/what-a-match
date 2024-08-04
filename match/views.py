@@ -118,20 +118,19 @@ def sm_matching(request):
 
     suitors = request.session.get('suitor_list', [])
     reviewers = request.session.get('reviewer_list', [])
-    print(suitors)
-    print(reviewers)
+
     num = len(suitors)
 
     SuitorPrefsFormSet = formset_factory(PrefsInputForm, min_num=num, validate_min=True, extra=0)
 
     if request.method == "POST":
         # Print raw POST data for debugging
-        print("POST data:", request.POST)
+        # print("POST data:", request.POST)
 
         formset = SuitorPrefsFormSet(request.POST, prefix='suitor_prefs')
 
         # Print management form errors
-        print("Management form errors:", formset.management_form.errors)
+        # print("Management form errors:", formset.management_form.errors)
 
         if formset.is_valid():
             suitor_list_prefs = []
@@ -146,9 +145,9 @@ def sm_matching(request):
             return redirect("match:sm_matching_1")  # Redirect to avoid re-submission
         else:
             # Print detailed formset errors
-            for form in formset:
-                print(f"Form errors: {form.errors}")
-            print("Management form errors:", formset.management_form.errors)
+            #for form in formset:
+            #    print(f"Form errors: {form.errors}")
+            #print("Management form errors:", formset.management_form.errors)
             raise Exception("INVALID FORM DETECTED")
     else:
         formset = SuitorPrefsFormSet(prefix='suitor_prefs')
@@ -169,12 +168,12 @@ def sm_matching_1(request):
 
     if request.method == "POST":
         # Print raw POST data for debugging
-        print("POST data:", request.POST)
+        #print("POST data:", request.POST)
 
         formset = ReviewerPrefsFormSet(request.POST, prefix='reviewer_prefs')
 
         # Print management form errors
-        print("Management form errors:", formset.management_form.errors)
+        #print("Management form errors:", formset.management_form.errors)
 
         if formset.is_valid():
             reviewer_list_prefs = []
@@ -189,9 +188,9 @@ def sm_matching_1(request):
             return redirect("match:sm_matching_complete")  # Redirect to avoid re-submission
         else:
             # Print detailed formset errors
-            for form in formset:
-                print(f"Form errors: {form.errors}")
-            print("Management form errors:", formset.management_form.errors)
+            #for form in formset:
+            #    print(f"Form errors: {form.errors}")
+            #print("Management form errors:", formset.management_form.errors)
             raise Exception("INVALID FORM DETECTED")
     else:
         formset = ReviewerPrefsFormSet(prefix='reviewer_prefs')
@@ -326,33 +325,47 @@ def sr_matching_roommates(request):
 def sr_prefs(request):
     """Retrieve the preferences for all roommates"""
 
-    suitors = request.session['sr_suitor_list']
+    suitors = request.session.get('sr_suitor_list', [])
 
     num = len(suitors)
 
     SuitorPrefsFormSet = formset_factory(PrefsInputForm, min_num=num, validate_min=True, extra=0)
 
     if request.method == "POST":
-        # POST data submitted
-        formset = SuitorPrefsFormSet(request.POST)
+        # Print raw POST data for debugging
+        #print("POST data:", request.POST)
+
+        formset = SuitorPrefsFormSet(request.POST, prefix='suitor_prefs')
+
+        # Print management form errors for debugging
+        #print("Management form errors:", formset.management_form.errors)
+
         if formset.is_valid():
             suitor_list_prefs = []
 
             for form in formset:
                 cd = form.cleaned_data
                 prefs = cd.get('preferences')
-                parsed_prefs = re.split("[\s,]+", prefs)
+                parsed_prefs = re.split(r"[\s,]+", prefs.strip())
                 suitor_list_prefs.append(parsed_prefs)
 
             request.session['sr_suitor_list_prefs'] = suitor_list_prefs
             return redirect("match:sr_matching_complete")  # Redirect to avoid re-submission
         else:
+            # Print detailed formset errors
+            #for form in formset:
+            #    print(f"Form errors: {form.errors}")
+            #print("Management form errors:", formset.management_form.errors)
             raise Exception("INVALID FORM DETECTED")
     else:
-        formset = SuitorPrefsFormSet()
+        formset = SuitorPrefsFormSet(prefix='suitor_prefs')
 
-    context = {'roommates': suitors, 'formset': formset}
+    # Zip the roommates with their forms for iteration in the template
+    roommates_forms = zip(suitors, formset.forms)
+
+    context = {'roommates_forms': roommates_forms, 'roommates': suitors, 'formset': formset}
     return render(request, 'match/sr_prefs.html', context)
+
 
 
 def sr_matching_complete(request):
