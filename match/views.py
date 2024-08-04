@@ -116,67 +116,90 @@ def sm_matching_reviewers(request):
 def sm_matching(request):
     """Retrieve the preferences for suitors"""
 
-    suitors = request.session['suitor_list']
-    reviewers = request.session['reviewer_list']
-
+    suitors = request.session.get('suitor_list', [])
+    reviewers = request.session.get('reviewer_list', [])
+    print(suitors)
+    print(reviewers)
     num = len(suitors)
 
     SuitorPrefsFormSet = formset_factory(PrefsInputForm, min_num=num, validate_min=True, extra=0)
 
     if request.method == "POST":
-        # POST data submitted
-        formset = SuitorPrefsFormSet(request.POST)
+        # Print raw POST data for debugging
+        print("POST data:", request.POST)
+
+        formset = SuitorPrefsFormSet(request.POST, prefix='suitor_prefs')
+
+        # Print management form errors
+        print("Management form errors:", formset.management_form.errors)
+
         if formset.is_valid():
             suitor_list_prefs = []
 
             for form in formset:
                 cd = form.cleaned_data
                 prefs = cd.get('preferences')
-                parsed_prefs = re.split("[\s,]+", prefs)
+                parsed_prefs = re.split(r"[\s,]+", prefs.strip())
                 suitor_list_prefs.append(parsed_prefs)
 
             request.session['suitor_list_prefs'] = suitor_list_prefs
             return redirect("match:sm_matching_1")  # Redirect to avoid re-submission
         else:
+            # Print detailed formset errors
+            for form in formset:
+                print(f"Form errors: {form.errors}")
+            print("Management form errors:", formset.management_form.errors)
             raise Exception("INVALID FORM DETECTED")
     else:
-        formset = SuitorPrefsFormSet()
+        formset = SuitorPrefsFormSet(prefix='suitor_prefs')
 
-    context = {'suitors': suitors, 'reviewers': reviewers, 'formset': formset}
+    suitors_forms = zip(suitors, formset)
+    context = {'suitors_forms': suitors_forms, 'reviewers': reviewers, 'formset': formset}
     return render(request, 'match/sm_matching.html', context)
 
 
 def sm_matching_1(request):
     """Retrieve the preferences for reviewers"""
 
-    suitors = request.session['suitor_list']
-    reviewers = request.session['reviewer_list']
-
-    num = len(suitors)
+    suitors = request.session.get('suitor_list', [])
+    reviewers = request.session.get('reviewer_list', [])
+    num = len(reviewers)
 
     ReviewerPrefsFormSet = formset_factory(PrefsInputForm, min_num=num, validate_min=True, extra=0)
 
     if request.method == "POST":
-        # POST data submitted
-        formset = ReviewerPrefsFormSet(request.POST)
+        # Print raw POST data for debugging
+        print("POST data:", request.POST)
+
+        formset = ReviewerPrefsFormSet(request.POST, prefix='reviewer_prefs')
+
+        # Print management form errors
+        print("Management form errors:", formset.management_form.errors)
+
         if formset.is_valid():
             reviewer_list_prefs = []
 
             for form in formset:
                 cd = form.cleaned_data
                 prefs = cd.get('preferences')
-                parsed_prefs = re.split("[\s,]+", prefs)
+                parsed_prefs = re.split(r"[\s,]+", prefs.strip())
                 reviewer_list_prefs.append(parsed_prefs)
 
             request.session['reviewer_list_prefs'] = reviewer_list_prefs
             return redirect("match:sm_matching_complete")  # Redirect to avoid re-submission
         else:
-            raise Exception()
+            # Print detailed formset errors
+            for form in formset:
+                print(f"Form errors: {form.errors}")
+            print("Management form errors:", formset.management_form.errors)
+            raise Exception("INVALID FORM DETECTED")
     else:
-        formset = ReviewerPrefsFormSet()
+        formset = ReviewerPrefsFormSet(prefix='reviewer_prefs')
 
-    context = {'suitors': suitors, 'reviewers': reviewers, 'formset': formset}
+    reviewers_forms = zip(reviewers, formset)
+    context = {'suitors': suitors, 'reviewers_forms': reviewers_forms, 'formset': formset}
     return render(request, 'match/sm_matching_1.html', context)
+
 
 
 def sm_matching_complete(request):

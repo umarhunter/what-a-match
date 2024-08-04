@@ -19,13 +19,13 @@
 <br>
 
 <h5><b><u>Reviewers</u></b></h5>
-{% for reviewer in reviewers %}
-    <p>{{ reviewer }}</p>
-{% endfor %}
 
 <form action="{% url 'match:sm_matching_1' %}" method="post">
     {% csrf_token %}
-    {{ formset.as_p }}
+    {{ formset.management_form }}
+    {% for reviewer, form in reviewers_forms %}
+        <p><b>{{ reviewer }}</b>'s: {{ form.preferences.label_tag }} {{ form.preferences }}</p>
+    {% endfor %}
     <input type="submit" value="Submit">
 </form>
 
@@ -38,6 +38,6 @@
 <br>
 </div>
 </body>
-        <style>.align{ text-align: center; }</style>
+    <style>.align{ text-align: center; }</style>
 {% endblock content %}
 </html>

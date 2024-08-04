@@ -20,13 +20,13 @@
 <br>
 <hr>
 <h5><b><u>Suitors</u></b></h5>
-{% for suitor in suitors %}
-    <p>{{ suitor }}</p>
-{% endfor %}
 
 <form action="{% url 'match:sm_matching' %}" method="post">
     {% csrf_token %}
-    {{ formset.as_p }}
+    {{ formset.management_form }}
+    {% for suitor, form in suitors_forms %}
+        <p><b>{{ suitor }}</b>'s {{ form.preferences }}</p>
+    {% endfor %}
     <input type="submit" value="Submit">
 </form>
 
@@ -35,7 +35,6 @@
 {% for reviewer in reviewers %}
     <p>{{ reviewer }}</p>
 {% endfor %}
-
 
 <br>
 </div>
